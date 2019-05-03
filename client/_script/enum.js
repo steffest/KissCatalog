@@ -1,0 +1,3 @@
+var EVENT = {
+	COLLECTION_CHANGE: 1
+};

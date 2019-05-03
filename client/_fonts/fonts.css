@@ -1,0 +1,24 @@
+@font-face {
+    font-family: 'Anton';
+    font-style: normal;
+    font-weight: 400;
+    src: url(Anton_400_normal.eot); /* http://fonts.gstatic.com/s/anton/v10/1Ptgg87LROyAm3Kz-Cs.eot */
+    src: local('☺'),
+        url(Anton_400_normal.eot?#iefix) format('embedded-opentype'), /* http://fonts.gstatic.com/s/anton/v10/1Ptgg87LROyAm3Kz-Cs.eot */
+        url(Anton_400_normal.woff2) format('woff2'), /* http://fonts.gstatic.com/s/anton/v10/1Ptgg87LROyAm3Kz-C8.woff2 */
+        url(Anton_400_normal.woff) format('woff'), /* http://fonts.gstatic.com/s/anton/v10/1Ptgg87LROyAm3Kz-Ck.woff */
+        url(Anton_400_normal.ttf) format('truetype'), /* http://fonts.gstatic.com/s/anton/v10/1Ptgg87LROyAm3Kz-CoCSKlv.ttf */
+        url(Anton_400_normal.svg#Anton_400_normal) format('svg'); /* http://fonts.gstatic.com/l/font?kit=1Ptgg87LROyAm3Kz-Cg&skey=3e16a04254d4c9b3&v=v10#Anton */
+}
+@font-face {
+    font-family: 'Saira';
+    font-style: normal;
+    font-weight: 400;
+    src: url(Saira_400_normal.eot); /* http://fonts.gstatic.com/s/saira/v3/memwYa2wxmKQyNknTZc.eot */
+    src: local('☺'),
+        url(Saira_400_normal.eot?#iefix) format('embedded-opentype'), /* http://fonts.gstatic.com/s/saira/v3/memwYa2wxmKQyNknTZc.eot */
+        url(Saira_400_normal.woff2) format('woff2'), /* http://fonts.gstatic.com/s/saira/v3/memwYa2wxmKQyNknTZM.woff2 */
+        url(Saira_400_normal.woff) format('woff'), /* http://fonts.gstatic.com/s/saira/v3/memwYa2wxmKQyNknTZU.woff */
+        url(Saira_400_normal.ttf) format('truetype'), /* http://fonts.gstatic.com/s/saira/v3/memwYa2wxmKQyNknTZY_ULUe.ttf */
+        url(Saira_400_normal.svg#Saira_400_normal) format('svg'); /* http://fonts.gstatic.com/l/font?kit=memwYa2wxmKQyNknTZQ&skey=536864831ea068c7&v=v3#Saira */
+}

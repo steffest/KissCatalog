@@ -1,0 +1,63 @@
+nav {
+    overflow: hidden;
+    height: 40px;
+    font-size: 17px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.44);
+    background-color: rgba(50, 58, 74, 0.19);
+}
+
+nav a {
+    float: left;
+    color: white;
+    text-decoration: none;
+    padding: 7px 0 10px 50px;
+    background-color: #596b80;
+    position: relative;
+    display: block;
+    height: 40px;
+    text-transform: capitalize;
+}
+
+nav a:first-of-type{
+    padding-left: 24px;
+}
+
+
+nav a::after {
+    content: " ";
+    display: block;
+    width: 0;
+    height: 0;
+    border-top: 50px solid transparent; /* Go big on the size, and let overflow hide */
+    border-bottom: 50px solid transparent;
+    border-left: 30px solid #596b80;
+    position: absolute;
+    top: 50%;
+    margin-top: -50px;
+    left: 100%;
+    z-index: 2;
+}
+
+nav a::before {
+    content: " ";
+    display: block;
+    width: 0;
+    height: 0;
+    border-top: 50px solid transparent;
+    border-bottom: 50px solid transparent;
+    border-left: 30px solid white;
+    position: absolute;
+    top: 50%;
+    margin-top: -50px;
+    margin-left: 1px;
+    left: 100%;
+    z-index: 1;
+}
+
+nav a:hover{
+    background-color: #697f94;
+}
+
+nav a:hover::after{
+    border-left-color: #697f94;
+}

@@ -1,0 +1,66 @@
+#blanket{
+    position: fixed;
+    bottom: 0;
+    top: 0;
+    left: 0;
+    right: 0;
+    background-color: rgba(0, 0, 0, 0.6);
+    z-index: 10000;
+    display: none;
+}
+
+#blanket.active{
+    display: block;
+}
+
+#blanket #dialog{
+    width: 300px;
+    max-width: 96%;
+    margin: auto;
+    background-color: #5b7281;
+    margin-top: 100px;
+    color: white;
+    box-shadow: 0 0 12px black;
+}
+
+#blanket #dialog .buttons{
+    text-align: center;
+    background-color: #4b6071;
+    margin-top: 20px;
+}
+
+#blanket #dialog .buttons div{
+    border: 1px solid #384554;
+    font-size: 13px;
+    margin: 10px 4px;
+    padding: 4px 6px;
+    display: inline-block;
+    min-width: 80px;
+}
+
+#blanket #dialog .buttons div:hover{
+    cursor: pointer;
+    background-color: #5b7281;
+}
+
+#blanket #dialog h3{
+    border-bottom: 1px solid #384554;
+    text-align: center;
+    font-size: 18px;
+    background-color: #415667;
+}
+
+#blanket #dialog p{
+    text-align: center;
+    padding: 0 20px;
+}
+
+#blanket #dialog input{
+    text-align: center;
+    padding: 10px;
+    width: 90%;
+    display: block;
+    margin: auto;
+    background-color: #c4ccd1;
+    border: 1px solid #415667;
+}

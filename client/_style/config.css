@@ -1,0 +1,65 @@
+.configform{
+    
+}
+
+.configform .important{
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    background-color: rgba(0, 0, 0, 0.2);
+    padding: 10px;
+}
+
+.configform .intro{
+    font-size: 14px;
+    padding: 20px 0;
+}
+
+.configform .formfield {
+    border-top: 1px solid rgba(255, 255, 255, 0.3);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+    padding: 10px;
+}
+
+.configform .formfield .example{
+    background-color: #597283;
+    margin-bottom: 8px;
+}
+
+.configform .formfield span{
+    background-color: #597283;
+    padding: 5px;
+    font-size: 12px;
+    color: #b2ccd3;
+    display: inline-block;
+}
+
+.configform .formfield .example i{
+    display: inline-block;
+    font-style: normal;
+    color: #97afb6;
+    font-size: 12px;
+    padding: 5px 10px;
+    background-color: #4f6677;
+}
+
+
+.configform .formfield input{
+    display: block;
+    width: 100%;
+    padding: 10px;
+    background-color: rgba(255, 255, 255, 0.8);
+    border: 1px solid rgba(0, 0, 0, 0.74);
+}
+
+.configform .buttons{
+    padding: 20px 0;
+}
+
+#collection .configform .buttons .button.big{
+    font-size: 18px;
+    opacity: 1;
+    margin: 10px 20px;
+}
+
+#collection .configform .buttons .button.big:hover{
+    background-color: #597283;
+}

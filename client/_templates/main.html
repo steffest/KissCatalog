@@ -1,0 +1,139 @@
+<!--collection-->
+<div class="collection {{#virtual}}virtual{{/virtual}}">
+<h2>{{name}}</h2>
+<div id="itemcontent">
+    <div id="infocol" {{^hasInfocol}}class="noinfo"{{/hasInfocol}}>
+        {{#images.length}}
+        <div id="images">
+            <a id="mainimage" style="background-image: url('{{>collectionUrl}}{{path}}/{{mainImage}}')" href="{{>collectionUrl}}{{path}}/{{mainImage}}" target="_blank"></a>
+            <div class="images" id="thumbs">
+                {{#images}}
+                <a href="{{>collectionUrl}}{{path}}" target="_blank" class="image" style="background-image: url('{{>collectionUrl}}{{path}}')">
+                    <div class="iconbutton delete" onclick="UI.deleteFile(event,'{{name}}')" title="Delete">x</div>
+                    <div class="iconbutton rename" onclick="UI.renameFile(event,'{{name}}')" title="Rename"></div>
+                    <span>{{name}}</span>
+                </a>
+                {{/images}}
+            </div>
+            <div class="clear"></div>
+        </div>
+        {{/images.length}}
+        <div id="info" {{#infoHTML}} class="content" {{/infoHTML}}>
+            <div class="buttons">
+                <div class="button" onclick="UI.editInfo()">{{#infoHTML}}Edit{{/infoHTML}}{{^infoHTML}}Add info{{/infoHTML}}</div>
+                {{^hasFiles}}<div class="button" onclick="UI.upload()">Add Files</div>{{/hasFiles}}
+                {{^hasFolders}}<div class="button" onclick="UI.addSubfolder()">Add Sub-item</div>{{/hasFolders}}
+                <div class="button editmode" onclick="UI.editInfo('ok')">Update</div>
+                <div class="button editmode" onclick="UI.editInfo('cancel')">Cancel</div>
+            </div>
+            <div id="infocontent">
+                {{{infoHTML}}}
+            </div>
+        </div>
+    </div>
+    {{#hasFiles}}
+    <div id="files">
+        <h4>Files</h4>
+        {{#visibleFiles}}
+        <a href="{{>collectionUrl}}{{path}}" target="_blank">{{name}}
+            <div class="iconbutton delete" onclick="UI.deleteFile(event,'{{name}}')" title="Delete">x</div>
+            <div class="iconbutton rename" onclick="UI.renameFile(event,'{{name}}')" title="Rename"></div>
+        </a>
+        {{/visibleFiles}}
+        <div class="buttons">
+            <div class="button" onclick="UI.upload()">Add {{^hasInfocol}}file{{/hasInfocol}}</div>
+            {{^hasInfocol}}
+            <div class="button" onclick="UI.editInfo()">Add Info</div>
+            {{^hasFolders}}<div class="button" onclick="UI.addSubfolder()">Add Sub-item</div>{{/hasFolders}}
+            {{/hasInfocol}}
+        </div>
+    </div>
+    {{/hasFiles}}
+</div>
+
+{{#hasFolders}}
+<div id="items">
+    {{#folders}}
+    <a href="#{{path}}">
+        <div class="iconbutton delete" onclick="UI.deleteFile(event,'{{name}}')" title="Delete">x</div>
+        <div class="iconbutton rename" onclick="UI.renameFile(event,'{{name}}')" title="Rename"></div>
+        {{#mainImage}}<figure style="background-image: url('{{>collectionUrl}}{{path}}/{{mainImage}}')"></figure>{{/mainImage}}{{#itemCount}}<i>{{itemCount}}</i>{{/itemCount}}
+        <span>{{name}}</span>
+    </a>
+    {{/folders}}
+    <a class="additem" onclick="UI.addSubfolder()"><i></i><span>+ Add item</span></a>
+    {{#showChildren}}
+    <div class="clear"></div>
+    <h4>Children</h4>
+    {{#children}}
+    <a href="#{{path}}">
+        <div class="iconbutton delete" onclick="UI.deleteFile(event,'{{name}}','{{path}}')" title="Delete">x</div>
+        <div class="iconbutton rename" onclick="UI.renameFile(event,'{{name}}','{{path}}')" title="Rename"></div>
+        {{#mainImage}}<figure style="background-image: url('{{>collectionUrl}}{{path}}/{{mainImage}}')"></figure>{{/mainImage}}
+        <span>{{name}}</span></a>
+    {{/children}}
+    {{/showChildren}}
+</div>
+{{/hasFolders}}
+<div class="clear"></div>
+
+<footer id="itemfooter">{{footerinfo}}</footer>
+
+</div>
+<!--/collection-->
+
+
+<!--notfound-->
+This item is not found ...<br><br>
+<a class="button" href="#/">Home</a> <a class="button" href="#/LastAdded">Recent Items</a>
+<!--/notfound-->
+
+
+<!--config-->
+<div class="configform">
+    <h3>Setup</h3>
+    {{^hasCollection}}
+    <div class="important">Your collection is not yet configured.<br></div>
+    {{/hasCollection}}
+    
+    <div>
+        
+        <div class="intro">
+            Kiss-catalog is a file-based catalog system.<br>
+            You structure your catalog in nested folders and files.<br>
+            Kiss-catalog transforms it into a searchable, browsable, web-ready catalog
+        </div>
+        
+        <div class="formfield">
+            <label>What is the name of your catalog?</label>
+            <input type="text" id="collectionName" value="{{collectionName}}" placeholder="...">
+            <div class="example"><i>For example</i><span>My Catalog</span></div>
+            
+        </div>
+    
+    
+        <div class="formfield">
+            <label>What is the full path to your root folder where you store your catalog?<br>
+                If you leave this blank a folder <i>"client/collection"</i> will be created</label>
+            <input type="text" id="collectionPath" value="{{collectionPath}}" placeholder="...">
+            <div class="example"><i>For example</i><span>C:/MyFiles/Catalog or /Users/MyName/Documents/Catalog/</span></div>
+        </div>
+    
+        <div class="formfield">
+            <label>If you plan to publish your catalog on the web, what is the root url to your files?</label>
+            <input type="text" id="staticCollectionUrl" value="{{staticCollectionUrl}}" placeholder="...">
+            <div class="example"><i>For example</i><span>e.g. http://mysite/catalog/</span></div>
+        </div>
+        
+        
+        <div class="buttons">
+            <div class="button big" onclick="UI.updateConfig()">Save</div>
+            {{#hasCollection}}
+            <div class="button big" onclick="UI.hideConfig()">Cancel</div>
+            {{/hasCollection}}
+        </div>
+        
+    </div>
+</div>
+<!--/config-->
+

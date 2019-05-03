@@ -1,0 +1,66 @@
+<html>
+<head>
+    <title>KISS-Catalog</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=4.0, user-scalable=1">
+
+
+    <link rel="stylesheet" type="text/css" href="_style/main.css">
+    <link rel="stylesheet" type="text/css" href="_style/collection.css">
+    <link rel="stylesheet" type="text/css" href="_style/nav.css">
+    <link rel="stylesheet" type="text/css" href="_style/search.css">
+    <link rel="stylesheet" type="text/css" href="_style/options.css">
+    <link rel="stylesheet" type="text/css" href="_style/config.css">
+    <link rel="stylesheet" type="text/css" href="_style/dialog.css">
+    <link rel="stylesheet" type="text/css" href="_style/mobile.css">
+
+    <link rel="stylesheet" type="text/css" href="_fonts/fonts.css">
+
+    <script src="_script/lib/eventbus.js"></script>
+    <script src="_script/lib/fetchService.js"></script>
+    <script src="_script/lib/mustache.js"></script>
+    <script src="_script/lib/template.js"></script>
+    
+    <script src="_script/enum.js"></script>
+    <script src="_script/config.js"></script>
+    <script src="_script/data.js"></script>
+    <script src="_script/ui.js"></script>
+    
+    <script src="_script/app.js"></script>
+    
+    
+</head>
+<body onload="App.init()">
+<div id="blanket">
+    <div id="dialog"></div>
+</div>
+<div id="container">
+    <div id="menubutton" onclick="UI.toggleMenu()"></div>
+    <div id="menu">
+        <div id="options">
+            <a href="#/LastModified">Show Last Modified</a>
+            <a href="#/LastAdded">Show Last Added</a>
+            <div class="option" id="option_ch" data-option="showChildren" onclick="UI.toggleOption(this)">Show Children <div class="togglebutton"><span>Yes</span><span>No</span></div></div>
+            <div class="option" id="option_li" data-option="showAsList" onclick="UI.toggleOption(this)">Display <div class="togglebutton gridlist"><span>List</span><span>Grid</span></div></div>
+        </div>
+    </div>
+
+    <div id="searchbar">
+        <div class="controls">
+            <div class="icon search" onclick="UI.hideSearch()"></div>
+            <input type="text" placeholder="Search" id="searchinput" onkeyup="UI.doSearch()">
+        </div>
+        <div id="searchresults"></div>
+    </div>
+
+    <div id="main">
+        <nav id="breadcrumb"></nav>
+        <div id="collection"></div>
+    </div>
+
+    <footer id="publicfooter" class="noadmin">You are browsing the public read-only version of this collection</footer>
+    <footer id="footer"></footer>
+</div>
+
+</body>
+</html>

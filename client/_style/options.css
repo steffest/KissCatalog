@@ -1,0 +1,114 @@
+#menubutton{
+    position: absolute;
+    right: 0;
+    top:0;
+    width: 40px;
+    height: 40px;
+    transition: background-color 0.2s ease-in-out;
+    z-index: 10;
+    background-image: url("../_img/menu.svg");
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: 28px 28px;
+}
+
+#menubutton:hover{
+    cursor: pointer;
+    background-color: rgba(89, 107, 128, 1);
+}
+
+#menubutton.active{
+    background-image: url("../_img/close.svg");
+    background-size: 20px 20px;
+}
+
+#menu{
+    position: absolute;
+    top: 41px;
+    right: 0;
+    width: 0;
+    height: auto;
+    overflow: hidden;
+    transition: width 0.2s ease-in-out;
+    z-index: 20;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.44);
+}
+
+#menu.active{
+    width: 210px;
+}
+
+#options{
+    width: 210px;
+    color: white;
+    font-size: 13px;
+    text-align: left;
+    background-color: #3F4F5E;
+    padding: 10px 8px;
+}
+
+#options .button,
+#options a{
+    background-color: transparent;
+    margin: 0;
+    padding: 4px;
+    opacity: 0.4;
+    transition: opacity 0.1s ease-in-out;
+    border-bottom: 1px solid #6b8396;
+    text-decoration: none;
+    display: block;
+    color: white;
+}
+
+#options .button:hover,
+#options a:hover{
+    background-color: rgba(89, 107, 128, 0.67);
+    cursor: pointer;
+    opacity: 1;
+}
+
+#options .option{
+    opacity: 0.4;
+    transition: opacity 0.1s ease-in-out;
+    padding: 4px;
+    border-bottom: 1px solid #6b8396;
+}
+
+#options .option:hover{
+    opacity: 1;
+    cursor: pointer;
+}
+
+#options .togglebutton{
+    border: 1px solid white;
+    color: white;
+    display: inline-block;
+    white-space: nowrap;
+    position: relative;
+    border-radius: 3px;
+    margin-left: 6px;
+    float: right;
+    font-size: 11px;
+}
+
+#options .togglebutton span{
+    width: 34px;
+    display: inline-block;
+    text-align: center;
+}
+
+#options .togglebutton:before{
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 50%;
+    background-color: white;
+    opacity: 0.8;
+    transition: left 0.2s ease-in-out;
+}
+
+#options .option.active .togglebutton:before{
+    left: 50%;
+}

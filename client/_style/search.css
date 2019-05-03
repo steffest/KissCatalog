@@ -1,0 +1,85 @@
+#searchbar{
+    position: absolute;
+    right: 7px;
+    top: 60px;
+    width: 200px;
+    height: 40px;
+    z-index: 10;
+}
+
+#searchbar .controls{
+    width:200px;
+    overflow: hidden;
+    transition: opacity 0.2s ease-in-out;
+    opacity: 0.4;
+}
+
+#searchbar:hover .controls{
+    opacity: 1;
+}
+
+
+#searchbar .icon{
+    width: 16px;
+    height: 30px;
+    right: 3px;
+    background-size: 16px 16px;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-image: url("../_img/search.svg");
+    vertical-align: middle;
+    position: absolute;
+    opacity: 0.8;
+    pointer-events: none;
+}
+
+#searchbar.active .icon{
+    background-image: url("../_img/close.svg");
+    background-size: 12px 12px;
+    pointer-events: initial;
+}
+
+#searchbar.active .icon:hover{
+    opacity: 1;
+    cursor: pointer;
+}
+
+#searchbar input{
+    background-color: transparent;
+    border: 0;
+    border-bottom: 1px dotted rgba(255, 255, 255, 0.3);
+    display: inline-block;
+    vertical-align: middle;
+    width: 200px;
+    height: 30px;
+    color: white;
+    padding-left: 6px;
+}
+
+#searchbar input::placeholder{
+    color: rgba(245, 245, 245, 0.3);
+}
+
+#searchresults{
+    background-color: #556a79;
+}
+
+#searchresults a{
+    display: block;
+    color: white;
+    text-decoration: none;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.36);
+    font-size: 11px;
+    padding: 4px;
+    width:200px;
+}
+
+#searchresults a:hover{
+    background-color: #688091;
+}
+
+#searchresults span{
+    display: block;
+    padding: 20px 10px;
+}
+
