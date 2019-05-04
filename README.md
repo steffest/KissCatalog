@@ -34,10 +34,12 @@ To reach these goals everything is file based. no database, no excell-sheets, no
 You structure you collection in folders. Each folder can contain files and subfolders that further describe your item.
 Info is stored in plain text files. Images are stored in .jpg or .png. Any other file you add is just regarded as "file".  
 
-Then, a script is run pull all these files into data-structure. (a static JSON file).
-This .json file is used to display a webinterface with browser and search features.  
+Then, a script is run that pulls all these files into data-structure. (a static JSON file).
+This .json file is used to display a webinterface with browse and search features.  
 When you edit/add content from the webinterface, the local files are changed.  
 The "database" is always being generated from the local files. 
+This means your data is your data: it lives in your folder as plain text files, completely outside Kiss-catalog.  
+If you stop using Kiss-catalog and delete it from your system, your hard cataloguing-work is not lost.   
 
 The main info file is called "info.txt"  
 The main images of an item is called "main.jpg"  
