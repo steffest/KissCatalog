@@ -72,7 +72,7 @@ for (let key in userConfig){
 // dev : use different path for Dropbox synced folder
 	if (process.platform === "darwin" && config.collectionPathOSX) config.collectionPath = config.collectionPathOSX;
 
-
+if (config.collectionPath) config.collectionPath=config.collectionPath.replace(/\\/g,"/");
 config.fullcollectionPath = config.collectionPath;
 if (config.fullcollectionPath && !util.isFullPath(config.fullcollectionPath)) config.fullcollectionPath =  config.appDir + config.fullcollectionPath;
 config.fullcollectionPath = util.addSlash(config.fullcollectionPath);

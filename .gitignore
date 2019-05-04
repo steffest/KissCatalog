@@ -1,3 +1,4 @@
 
 *.deleted
 client/collection
+bin/client
