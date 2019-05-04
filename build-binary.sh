@@ -1,1 +1,1 @@
-pkg package.json --target node6-macos,node6-win,node6-linux
+pkg package.json --out-path bin --target node6-macos,node6-win,node6-linux

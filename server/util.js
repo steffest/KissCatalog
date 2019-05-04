@@ -49,7 +49,7 @@ var Util = function(){
 	};
 	
 	me.addSlash = function(s){
-		if (s.substr(s.length-1) !== "/") s+="/";
+		if (s && s.substr(s.length-1) !== "/") s+="/";
 		return s;
 	};
 	
