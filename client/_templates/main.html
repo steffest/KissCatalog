@@ -88,9 +88,22 @@ This item is not found ...<br><br>
 <a class="button" href="#/">Home</a> <a class="button" href="#/LastAdded">Recent Items</a>
 <!--/notfound-->
 
+<!--quit-->
+<div id="container">
+    <center>
+        <h3>Shut Down</h3>
+        <br>
+        You can <a href="javascript:window.close()" style="color: white">close this window</a>
+        
+        <br><br>
+        
+    </center>
+</div>
+<!--/quit-->
+
 
 <!--config-->
-<div class="configform">
+<div class="configform" id="configform">
     <h3>Setup</h3>
     {{^hasCollection}}
     <div class="important">Your collection is not yet configured.<br></div>
@@ -106,23 +119,28 @@ This item is not found ...<br><br>
         
         <div class="formfield">
             <label>What is the name of your catalog?</label>
-            <input type="text" id="collectionName" value="{{collectionName}}" placeholder="...">
+            <input type="text" id="collectionName" value="{{collectionName}}" placeholder="..." class="configinput">
             <div class="example"><i>For example</i><span>My Catalog</span></div>
             
         </div>
-    
-    
+        
         <div class="formfield">
             <label>What is the full path to your root folder where you store your catalog?<br>
                 If you leave this blank a folder <i>"client/collection"</i> will be created</label>
-            <input type="text" id="collectionPath" value="{{collectionPath}}" placeholder="...">
+            <input type="text" id="collectionPath" value="{{collectionPath}}" placeholder="..." class="configinput">
             <div class="example"><i>For example</i><span>C:/MyFiles/Catalog or /Users/MyName/Documents/Catalog/</span></div>
         </div>
     
         <div class="formfield">
             <label>If you plan to publish your catalog on the web, what is the root url to your files?</label>
-            <input type="text" id="staticCollectionUrl" value="{{staticCollectionUrl}}" placeholder="...">
-            <div class="example"><i>For example</i><span>e.g. http://mysite/catalog/</span></div>
+            <input type="text" id="staticCollectionUrl" value="{{staticCollectionUrl}}" placeholder="..." class="configinput">
+            <div class="example"><i>For example</i><span>e.g. http://www.mysite.com/catalog/</span></div>
+        </div>
+
+        <div class="formfield">
+            <label>The port the interface is running on: <small>(Needs a restart if you change this)</small></label>
+            <input type="text" id="port" value="{{port}}" placeholder="..." class="configinput">
+            <div class="example"><i>For example</i><span>4303</span></div>
         </div>
         
         
@@ -136,4 +154,6 @@ This item is not found ...<br><br>
     </div>
 </div>
 <!--/config-->
+
+
 

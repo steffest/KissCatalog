@@ -9,7 +9,6 @@ var UI = function(){
 	var searchInput;
 	var footer;
 	var optionsContainer;
-	var version = "dev";
 	var editor;
 	var blanket;
 	var dialog;
@@ -60,22 +59,24 @@ var UI = function(){
 	};
 
 	me.updateConfig = function(){
-		function getValue(id){
-			var elm = document.getElementById(id);
-			return elm ? elm.value : "";
-		}
-		var data = {
-			collectionName: getValue("collectionName"),
-			collectionPath: getValue("collectionPath"),
-			staticCollectionUrl: getValue("staticCollectionUrl")
-		};
-		DataProvider.updateConfig(data,function(result){
-			if (result.success){
-				window.location.reload(true);
-			}else{
-				me.showDialog("Something went wrong updating your Configuration");
+		var configform = document.getElementById("configform");
+		if (configform){
+			var data = {};
+			var inputs = configform.querySelectorAll(".configinput");
+			for (var i = 0; i<inputs.length; i++){
+				var input = inputs[i];
+				if (input.id) data[input.id] = input.value;
 			}
-		})
+			
+			DataProvider.updateConfig(data,function(result){
+				if (result.success){
+					window.location.reload(true);
+				}else{
+					me.showDialog("Something went wrong updating your Configuration");
+				}
+			})
+			
+		}
 	};
 	
 	me.hideConfig = function(){
@@ -348,6 +349,12 @@ var UI = function(){
 		blanket.className = "";
 	};
 	
+	me.quit = function(){
+		DataProvider.quit(function(result){
+			document.body.innerHTML = Mustache.render(Template.get("quit"));
+		});
+	};
+	
 	
 	var renderMenu = function(){
 		breadCrumb.innerHTML = "";
@@ -363,7 +370,7 @@ var UI = function(){
 	};
 	
 	var renderFooter = function(){
-		var html = 'KISS-Catalog V ' + version + '  - &copy;2019 by <a href="https://www.stef.be/" target="_blank">Steffest</a> - source code on <a href="https://www.github.com/steffest/">Github</a>';
+		var html = 'KISS-Catalog V ' + (Config.version || dev) + '  - &copy;2019 by <a href="https://www.stef.be/" target="_blank">Steffest</a> - source code on <a href="https://github.com/steffest/KissCatalog" target="_blank">Github</a>';
 		footer.innerHTML = html;
 	};
 
@@ -385,10 +392,20 @@ var UI = function(){
 			button2.className = "button";
 			button2.innerHTML = "Configuration";
 			button2.onclick = me.editConfig;
-			
-			
+
 			optionsContainer.appendChild(button);
 			optionsContainer.appendChild(button2);
+			
+			//if (Config.isRunningPackaged){
+				var button3 = document.createElement("div");
+				button3.className = "button";
+				button3.innerHTML = "Quit";
+				button3.onclick = me.quit;
+				optionsContainer.appendChild(button3);
+			//}
+			
+			
+			
 		}
 	};
 	

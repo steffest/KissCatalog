@@ -101,6 +101,13 @@ var DataProvider = function(){
 			next({success:result === "ok"});
 		});
 	};
+
+	me.quit = function(next){
+		FetchService.post("/quit","",function(result){
+			console.log(result);
+			next({success:result === "ok"});
+		});
+	};
 	
 	me.setState = function(key,value){
 		state[key] = value;
@@ -143,7 +150,7 @@ var DataProvider = function(){
     };
     
     
-
+    
 	function buildFlatFolders(){
         flatFolders  = [];
 

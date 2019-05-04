@@ -31,6 +31,27 @@ var Util = function(){
 		}
 		return s;
 	};
+
+	me.openUI = function(url){
+		var commands = {darwin: "open", win32: "explorer.exe", linux: "xdg-open"};
+		var command = commands[process.platform] || "open";
+
+		var spawn = require('child_process').spawn;
+		var p = spawn(command, [url]);
+	};
+
+	me.isFullPath = function(s){
+		if (process.platform.substr(0,3) === "win"){
+			return s.indexOf(":/")>0;
+		}else{
+			return s.substr(0,1) === "/";
+		}
+	};
+	
+	me.addSlash = function(s){
+		if (s.substr(s.length-1) !== "/") s+="/";
+		return s;
+	};
 	
 	return me;
 }();

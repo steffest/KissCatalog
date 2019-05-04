@@ -26,12 +26,12 @@ var Scanner = function(){
 			node.folders = node.folders || [];
 			node.images = node.images || [];
 			//console.log(node.path);
-			fs.readdir(config.collectionPath + node.path, (err, files) => {
+			fs.readdir(config.fullcollectionPath + node.path, (err, files) => {
 				if (files){
 					files.forEach(file => {
 						if (file.indexOf(".") !== 0){
 							var thisPath = node.path + "/" + file;
-							var stats = fs.lstatSync(config.collectionPath + thisPath);
+							var stats = fs.lstatSync(config.fullcollectionPath + thisPath);
 							var item = {
 								name: file,
 								lastModified: stats.mtime,
@@ -52,7 +52,7 @@ var Scanner = function(){
 										}
 									}else{
 										if (file == "info.txt"){
-											var contents = fs.readFileSync(config.collectionPath + node.path + "/" + file, 'utf8');
+											var contents = fs.readFileSync(config.fullcollectionPath + node.path + "/" + file, 'utf8');
 											node.info = contents;
 											// also add info.txt to files, it's used to calculate the last modified date of the parent folder
 										}
@@ -80,8 +80,7 @@ var Scanner = function(){
 	}
 
 	function done(){
-		var dbPath = "db.json" ;
-		if (!config.isRunningPackaged) dbPath = "client/_data/" + dbPath;
+		var dbPath = config.dataPath + "db.json" ;
 		fs.writeFile(dbPath, JSON.stringify(collectionData,null,2), function(err) {
 			console.log(err ? err : "done");
 			if (onDone) onDone(collectionData);
