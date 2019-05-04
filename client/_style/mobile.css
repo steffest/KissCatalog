@@ -59,15 +59,9 @@
     }
 
     #searchbar{
-        background-color: transparent;
-    }
-
-    #searchbar .icon:hover{
-        background-color: transparent;
-    }
-
-    #searchbar.active{
-        background-color: #3B4B59;
+       position: relative;
+        top: 4px;
+        left: 10px;
     }
 
     #searchresults{
