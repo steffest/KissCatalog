@@ -39,6 +39,9 @@ This .json file is used to display a webinterface with browser and search featur
 When you edit/add content from the webinterface, the local files are changed.  
 The "database" is always being generated from the local files. 
 
+The main info file is called "info.txt"  
+The main images of an item is called "main.jpg"  
+
 If you want to display your collection on the web, simply put all your static files on a webhost.  
 No database or serverside processing needed.   
 
@@ -52,7 +55,7 @@ Go to the folder you downloaded Kiss-catalog and run
 
 It will open a browser where you can configure it for first use.  
   
-If you don't want to fiddle with node, you can also download the [pre-build binaries](.bin) for OSX, Windows or Linux.
+If you don't want to fiddle with node, you can also download the [pre-build binaries](./bin) for OSX, Windows or Linux.
 These binaries are packaged with [PKG](https://github.com/zeit/pkg)  
 If you want to package them yourself you need to install pkg
 ``npm install -g pkg``  
@@ -61,17 +64,17 @@ and then run
 in the Kiss-Catalog folder to build your binary
 
 
-### deploy to web.
+### Deploy to web.
 Put your collection files somehere on the web so they are accessible.  
-Enter this url (of you collection files) in the Kiss-Catalog config screen in the "root url" box.  
+Enter this url (of your collection files) in the Kiss-Catalog config screen in the "root url" box.  
 Put the "client" folder of Kiss-Catalog on your webhost.  
 If you run from the packaged binary then copy the "client" folder (located in the same location as your binary)  there too.  
-Your collection is now at http://your.web.host/client  (in read only mode)
+Your collection is now at http://your.web.host/client  (in read only mode)  
 Of course you can rename the "client" folder to whatever you want.  
 
 
 ### Future plans
- - make all text files editable from the web interface  
+ - Make all text files editable from the web interface  
  - Add some authentication so you can also put the server online and manage everything from there  
  - Make the webinterface compatible with ancient browsers (Amiga)
  - add some image editing tools in the webinterface to quickly rotate,resize and crop images.
