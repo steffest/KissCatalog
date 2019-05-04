@@ -195,6 +195,7 @@
     font-size: 11px;
     transition: background-color 0.2s ease-in-out;
     text-shadow: 1px 1px 2px black;
+    overflow: hidden;
 }
 
 .iconbutton{

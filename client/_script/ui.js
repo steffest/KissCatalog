@@ -34,6 +34,7 @@ var UI = function(){
 			}
 			
 			Config.hasBackend = !!Config.hasBackend;
+			if (Config.staticCollectionUrl) Config.collectionUrl = Config.staticCollectionUrl;
 			renderFooter();
 			renderOptions();
 			
@@ -55,7 +56,12 @@ var UI = function(){
 	me.editConfig = function(){
 		me.hideMenu();
 		breadCrumb.innerHTML = "";
-		collectionContainer.innerHTML=Mustache.render(Template.get("config"),Config);
+		if (Config.hasBackend){
+			collectionContainer.innerHTML=Mustache.render(Template.get("config"),Config);
+		}else{
+			document.body.innerHTML=Mustache.render(Template.get("noconfig"),Config);
+		}
+
 	};
 
 	me.updateConfig = function(){
@@ -370,7 +376,7 @@ var UI = function(){
 	};
 	
 	var renderFooter = function(){
-		var html = 'KISS-Catalog V ' + (Config.version || dev) + '  - &copy;2019 by <a href="https://www.stef.be/" target="_blank">Steffest</a> - source code on <a href="https://github.com/steffest/KissCatalog" target="_blank">Github</a>';
+		var html = 'KISS-Catalog V ' + (Config.version || "dev") + '  - &copy;2019 by <a href="https://www.stef.be/" target="_blank">Steffest</a> - source code on <a href="https://github.com/steffest/KissCatalog" target="_blank">Github</a>';
 		footer.innerHTML = html;
 	};
 

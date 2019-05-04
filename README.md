@@ -6,6 +6,8 @@ Kiss-catalog is a file-based catalog system.
 You structure your catalog in nested folders and files.  
 Kiss-Catalog transforms it into a searchable, browsable, web-ready catalog
 
+There's a small demo collection at http://www.stef.be/collector/amiga/ (read only mode)
+
 
 ![KISS-Catalog List](./docs/_img/screen1.png?raw=true)
 

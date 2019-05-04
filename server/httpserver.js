@@ -224,6 +224,7 @@ var HTTPserver = function(){
 						if (!userConfig.port) userConfig.port = 4303;
 						userConfig.port = parseInt(userConfig.port);
 						if (isNaN(userConfig.port)) userConfig.port = 4303;
+						userConfig.hasCollection = true;
 						
 						for (let key in userConfig){config[key] = userConfig[key]};
 
