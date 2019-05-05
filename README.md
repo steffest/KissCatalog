@@ -14,8 +14,9 @@ There's a small demo collection at http://www.stef.be/collector/amiga/ (read onl
 ![KISS-Catalog Detail](./docs/_img/screen2.png?raw=true)
 
 ### History
-This project was born to attend to a personal need.
-my Retro Computer collection was growing up to a point where I didn't know exactly what I had anymore, or where I had put it. 
+This project was born of a personal need.
+My retro computer collection was growing up to a point where I didn't know exactly what I had anymore, or where I had put it.
+Questions like "I know I have this accelerator card, but ... where the heck is it?" needed answers.
 The difference between a collector and a hoarder is that the former knows what he has and keeps everything in good shape.  
 There's a ton of software already out there to help with that but I wanted something super-super-simple.
 As experience taught me: If it's too hard to maintain, it won't be.
@@ -23,9 +24,9 @@ As experience taught me: If it's too hard to maintain, it won't be.
 ### Goals
  - simple simple simple to maintain
  - sustainable - this means:
-   - no exotic or platform dependent file formats: even 2 decades from know, every data you enter should still be accessible
-   - no external (web)platforms, it's the only way to make sure your data is still there in a few years time.
-   - no code dependencies. again: it's to only way to make sure your system still runs in a few years time.
+   - no exotic or platform dependent file formats: even 2 decades from know, every data you entered should still be accessible
+   - no external (web)platforms: it's the only way to make sure your data is still there in a few years time.
+   - no code dependencies. again: it's the only way to make sure your system still runs in a few years time.
    - platform independent. everything should be maintainable from whatever device you use. In my case this also means super old systems like the Commodore Amiga.
  - web enabled: everything should be easily accessible online if you want.
  - everything should be searchable/browsable to quickly locate an item or to quickly show some overviews
@@ -36,7 +37,7 @@ To reach these goals everything is file based. no database, no excell-sheets, no
 You structure you collection in folders. Each folder can contain files and subfolders that further describe your item.
 Info is stored in plain text files. Images are stored in .jpg or .png. Any other file you add is just regarded as "file".  
 
-Then, a script is run that pulls all these files into data-structure. (a static JSON file).
+Then, a script is run that pulls all these files into data-structure.
 This .json file is used to display a webinterface with browse and search features.  
 When you edit/add content from the webinterface, the local files are changed.  
 The "database" is always being generated from the local files. 
@@ -44,7 +45,7 @@ This means your data is your data: it lives in your folder as plain text files, 
 If you stop using Kiss-catalog and delete it from your system, your hard cataloguing-work is not lost.   
 
 The main info file is called "info.txt"  
-The main images of an item is called "main.jpg"  
+The main image of an item is called "main.jpg"
 
 If you want to display your collection on the web, simply put all your static files on a webhost.  
 No database or serverside processing needed.   
@@ -82,6 +83,7 @@ Of course you can rename the "client" folder to whatever you want.
  - Add some authentication so you can also put the server online and manage everything from there  
  - Make the webinterface compatible with ancient browsers (Amiga)
  - add some image editing tools in the webinterface to quickly rotate,resize and crop images.
+ - maybe I'll package everything more neatly using Electron or something, but honestly ... you should just install Node and run it from source :-)
  - Feature requests are welcome!
 
 
