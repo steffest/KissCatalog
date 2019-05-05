@@ -70,7 +70,7 @@ in the Kiss-Catalog folder to build your binary
 
 
 ### Deploy to web.
-Put your collection files somehere on the web so they are accessible.  
+Put your collection files somewhere on the web so they are accessible.
 Enter this url (of your collection files) in the Kiss-Catalog config screen in the "root url" box.  
 Put the "client" folder of Kiss-Catalog on your webhost.  
 If you run from the packaged binary then copy the "client" folder (located in the same location as your binary)  there too.  
@@ -82,11 +82,16 @@ Of course you can rename the "client" folder to whatever you want.
  - Make all text files editable from the web interface  
  - Add some authentication so you can also put the server online and manage everything from there  
  - Make the webinterface compatible with ancient browsers (Amiga)
- - add some image editing tools in the webinterface to quickly rotate,resize and crop images.
- - maybe I'll package everything more neatly using Electron or something, but honestly ... you should just install Node and run it from source :-)
+ - Add some image editing tools in the webinterface to quickly rotate,resize and crop images.
+ - Maybe I'll package everything more neatly using Electron or something, but honestly ... you should just install Node and run it from source :-)
  - Feature requests are welcome!
 
 
+### Current Feature Requests (will probably be implement one sunny day)
+ - pagination
+ - view-settings per folder (like some folders in grid mode, others in list mode)
+ - "spotlight" some items that will be displayed on the home screen
+ - private fields and images (e.g. to put the estimated value of items)
 
 
 
