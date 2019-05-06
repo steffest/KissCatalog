@@ -2,3 +2,4 @@
 *.deleted
 client/collection
 bin/client
+users.json

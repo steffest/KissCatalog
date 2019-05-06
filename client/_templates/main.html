@@ -133,11 +133,19 @@ This item is not found ...<br><br>
             <input type="text" id="collectionPath" value="{{collectionPath}}" placeholder="..." class="configinput">
             <div class="example"><i>For example</i><span>C:/MyFiles/Catalog or /Users/MyName/Documents/Catalog/</span></div>
         </div>
+
+        <h4>Advanced Settings</h4>
     
         <div class="formfield">
             <label>If you plan to publish your catalog on the web, what is the root url to your files?</label>
             <input type="text" id="staticCollectionUrl" value="{{staticCollectionUrl}}" placeholder="..." class="configinput">
             <div class="example"><i>For example</i><span>e.g. http://www.mysite.com/catalog/</span></div>
+        </div>
+
+        <div class="formfield">
+            <label>If you access your Kiss-Catalog server from the outside, what is your password?</label>
+            <input type="password" id="password" value="dummy" placeholder="..." class="configinput">
+            <div class="example"><i>Note</i><span>If you don't supply a password, your catalog will be in public read-only mode when accessing from the outside.</span></div>
         </div>
 
         <div class="formfield">
@@ -170,6 +178,27 @@ This item is not found ...<br><br>
     </center>
 </div>
 <!--/noconfig-->
+
+
+<!--login-->
+<div class="loginform form" id="loginform">
+    <h3>Login</h3>
+
+    <div>
+
+        <div class="formfield">
+            <label>Password</label>
+            <input type="text" id="password" value="{{password}}" placeholder="..." class="logininput">
+        </div>
+
+        <div class="buttons">
+            <div class="button big" onclick="UI.doLogin()">Login</div>
+            <div class="button big" onclick="UI.hideConfig()">Cancel</div>
+        </div>
+
+    </div>
+</div>
+<!--/login-->
 
 
 

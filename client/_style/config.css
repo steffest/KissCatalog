@@ -13,6 +13,7 @@
     padding: 20px 0;
 }
 
+.form .formfield,
 .configform .formfield {
     border-top: 1px solid rgba(255, 255, 255, 0.3);
     border-bottom: 1px solid rgba(0, 0, 0, 0.2);
@@ -41,7 +42,7 @@
     background-color: #4f6677;
 }
 
-
+.form .formfield input,
 .configform .formfield input{
     display: block;
     width: 100%;
@@ -50,16 +51,19 @@
     border: 1px solid rgba(0, 0, 0, 0.74);
 }
 
+.form .buttons,
 .configform .buttons{
     padding: 20px 0;
 }
 
+#collection .form .buttons .button.big,
 #collection .configform .buttons .button.big{
     font-size: 18px;
     opacity: 1;
     margin: 10px 4px;
 }
 
+#collection .form .buttons .button.big:hover,
 #collection .configform .buttons .button.big:hover{
     background-color: #597283;
 }

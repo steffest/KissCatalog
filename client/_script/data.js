@@ -102,6 +102,22 @@ var DataProvider = function(){
 		});
 	};
 
+	me.login = function(logindata,next){
+		FetchService.get("/challenge",function(challenge){
+			if (challenge){
+				var data = {
+					challenge: challenge,
+					response: md5(challenge + "_" + md5(logindata.password))
+				};
+				FetchService.post("/login",JSON.stringify(data),function(result){
+					next({success:result === "ok"});
+				});
+			}else{
+				next({success:false});
+			}
+		});
+	};
+
 	me.quit = function(next){
 		FetchService.post("/quit","",function(result){
 			console.log(result);

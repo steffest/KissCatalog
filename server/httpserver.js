@@ -6,6 +6,7 @@ var HTTPserver = function(){
 	var http = require('http');
 	var path = require('path');
 	var util = require('./util.js');
+	var auth = require('./auth.js');
 	var scanner = require("./scanner.js");
 
 	// allowed file extensions
@@ -60,6 +61,7 @@ var HTTPserver = function(){
 						// this overrides the static file so the frontend knows there's an active backend running and can switch in edit mode.
 						res.writeHead(200, {'Content-Type': mimeTypes['.json']});
 						config.hasBackend = true;
+						config.isAuthenticated = auth.isAuthenticated(req,res);
 						config.hasCollection = !!config.collectionPath;
 						res.end(JSON.stringify(config));
 						return;
@@ -92,10 +94,39 @@ var HTTPserver = function(){
 					});
 				}
 
-
-
+				if (action === "challenge"){
+					handled = true;
+					res.end(new Date().getTime().toString());
+				}
 
 			}else if(req.method === "POST") {
+
+				var isAuthenticated = auth.isAuthenticated(req,res);
+
+				if (action === "login"){
+					handled = true;
+					parseBody(body => {
+						var user = {};
+						try{
+							user = fs.readFileSync("users.json");
+							user = JSON.parse(user);
+						}catch (e) {
+							user = {}
+						}
+						var challenge =  body.challenge;
+						auth.login(body,user,req,res,function(result){
+							res.end(result ? "ok" : "error");
+						});
+					});
+				}
+
+				if (!isAuthenticated && !handled){
+					handled = true;
+					res.writeHead(403, {'Content-Type': 'text/html'});
+					res.end("Forbidden");
+					action="";
+					return;
+				}
 
 				function parseBody(next){
 					let body = '';
@@ -217,7 +248,15 @@ var HTTPserver = function(){
 							userConfig = {};
 						}
 
-						for (let key in body){userConfig[key] = body[key]};
+						var password = "";
+						for (let key in body){
+							var include = true;
+							if (key === "password"){
+								password = body[key];
+								include = false;
+							}
+							if (include) userConfig[key] = body[key];
+						}
 						
 						if (!userConfig.collectionPath) userConfig.collectionPath = "client/collection/";
 						if (!userConfig.collectionName) userConfig.collectionName = "Collection";
@@ -234,6 +273,23 @@ var HTTPserver = function(){
 						
 						console.log("Collection path is now " + config.fullcollectionPath);
 						console.log("writing config to " + configPath);
+
+						if (password !== "dummy"){
+							var filename = "users.json";
+							if (password === ""){
+								if (fs.existSync(filename))
+								try{fs.unlink(filename,function(err){
+									if (err){
+										console.log("error removing password...");
+									}else{
+										console.log("password removed.");
+									}})}catch (e){console.log("error removing password...");}
+							}else{
+								// the password is stored (as hash) in the same dir as the main server - don't expose this if you put this on a public server ...
+								fs.writeFile(filename,JSON.stringify({user: password}),"utf8",function(err){console.log("password updated");});
+							}
+
+						}
 						
 						fs.writeFile(configPath,JSON.stringify(userConfig,null,2),"utf8",function(err){
 							if (!err){

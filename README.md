@@ -80,7 +80,7 @@ Of course you can rename the "client" folder to whatever you want.
 
 ### Future plans
  - Make all text files editable from the web interface  
- - Add some authentication so you can also put the server online and manage everything from there  
+ - ~~Add some authentication so you can also put the server online and manage everything from there~~ -> Done!
  - Make the webinterface compatible with ancient browsers (Amiga)
  - Add some image editing tools in the webinterface to quickly rotate,resize and crop images.
  - Maybe I'll package everything more neatly using Electron or something, but honestly ... you should just install Node and run it from source :-)

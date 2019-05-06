@@ -32,27 +32,28 @@ var UI = function(){
 					Config[key] = result[key];
 				}
 			}
-			
+
 			Config.hasBackend = !!Config.hasBackend;
 			if (Config.staticCollectionUrl) Config.collectionUrl = Config.staticCollectionUrl;
 			renderFooter();
 			renderOptions();
-			
-			if (!Config.hasBackend){
+
+			Config.isLoggedIn = Config.hasBackend && Config.isAuthenticated;
+			if (!Config.isLoggedIn){
 				document.body.classList.add("static");
 			}
-			
+
 			if (next) next();
 		})
 	};
-	
+
 	me.toggleOption = function(elm){
 		elm.classList.toggle("active");
 		Config[elm.dataset.option] = elm.classList.contains("active");
 		localStorage.setItem("kiss-" + [elm.dataset.option],Config[elm.dataset.option] ? "1" : "0");
 		renderCollection();
 	};
-	
+
 	me.editConfig = function(){
 		me.hideMenu();
 		breadCrumb.innerHTML = "";
@@ -64,6 +65,16 @@ var UI = function(){
 
 	};
 
+	me.login = function(){
+		me.hideMenu();
+		breadCrumb.innerHTML = "";
+		if (Config.hasBackend){
+			collectionContainer.innerHTML=Mustache.render(Template.get("login"),Config);
+		}else{
+			document.body.innerHTML=Mustache.render(Template.get("noconfig"),Config);
+		}
+	};
+
 	me.updateConfig = function(){
 		var configform = document.getElementById("configform");
 		if (configform){
@@ -73,7 +84,11 @@ var UI = function(){
 				var input = inputs[i];
 				if (input.id) data[input.id] = input.value;
 			}
-			
+
+			if (data.password && data.password !== "dummy"){
+				data.password = md5(data.password)
+			}
+
 			DataProvider.updateConfig(data,function(result){
 				if (result.success){
 					window.location.reload(true);
@@ -81,12 +96,33 @@ var UI = function(){
 					me.showDialog("Something went wrong updating your Configuration");
 				}
 			})
-			
+
 		}
 	};
-	
+
 	me.hideConfig = function(){
 		renderCollection();
+	};
+
+	me.doLogin = function(){
+		var loginform = document.getElementById("loginform");
+		if (loginform){
+			var data = {};
+			var inputs = loginform.querySelectorAll(".logininput");
+			for (var i = 0; i<inputs.length; i++){
+				var input = inputs[i];
+				if (input.id) data[input.id] = input.value;
+			}
+
+			DataProvider.login(data,function(result){
+				if (result.success){
+					window.location.reload(true);
+				}else{
+					me.showDialog("Sorry, invalid login");
+				}
+			})
+
+		}
 	};
 
 	me.toggleMenu = function(){
@@ -178,11 +214,11 @@ var UI = function(){
 		};
 		DataProvider.setCurrentCollection(list);
 	};
-	
+
 	me.notFound = function(){
 		collectionContainer.innerHTML = Template.get("notfound")
 	};
-	
+
 	me.editInfo = function(action){
 		var infoCol = document.getElementById("infocol");
 		var infoContainer = document.getElementById("info");
@@ -214,7 +250,7 @@ var UI = function(){
 		}
 
 	};
-	
+
 	me.deleteFile = function(event,filename,path){
 		if (event && event.preventDefault){
 			event.preventDefault();
@@ -248,7 +284,7 @@ var UI = function(){
 			event.preventDefault();
 			event.stopPropagation();
 		}
-		
+
 		if (path && path.indexOf(filename)>=0){
 			path = path.split("/");
 			path.pop();
@@ -313,7 +349,7 @@ var UI = function(){
 			}
 		})
 	};
-	
+
 	me.showDialog = function(config){
 		if (typeof config === "string"){
 			config={intro: config}
@@ -354,14 +390,14 @@ var UI = function(){
 	me.hideDialog = function(){
 		blanket.className = "";
 	};
-	
+
 	me.quit = function(){
 		DataProvider.quit(function(result){
 			document.body.innerHTML = Mustache.render(Template.get("quit"));
 		});
 	};
-	
-	
+
+
 	var renderMenu = function(){
 		breadCrumb.innerHTML = "";
         var path = DataProvider.getCurrentCollection().path.split("/");
@@ -374,7 +410,7 @@ var UI = function(){
             breadCrumb.appendChild(a);
         })
 	};
-	
+
 	var renderFooter = function(){
 		var html = 'KISS-Catalog V ' + (Config.version || "dev") + '  - &copy;2019 by <a href="https://www.stef.be/" target="_blank">Steffest</a> - source code on <a href="https://github.com/steffest/KissCatalog" target="_blank">Github</a>';
 		footer.innerHTML = html;
@@ -382,45 +418,52 @@ var UI = function(){
 
 	var renderOptions = function(){
 		if (Config.hasBackend){
-			var buttonLabel = "Rebuild Database";
-			var button = document.createElement("div");
-			button.className = "button";
-			button.innerHTML = buttonLabel;
-			button.onclick = function(){
-				button.innerHTML = '<i class="spinner">Loading ...</i>';
-				App.refresh(function(){
-					button.innerHTML = buttonLabel;
-					UI.hideMenu();
-				});
-			};
-			
-			var button2 = document.createElement("div");
-			button2.className = "button";
-			button2.innerHTML = "Configuration";
-			button2.onclick = me.editConfig;
 
-			optionsContainer.appendChild(button);
-			optionsContainer.appendChild(button2);
-			
-			//if (Config.isRunningPackaged){
+			if (Config.isAuthenticated){
+				var buttonLabel = "Rebuild Database";
+				var button = document.createElement("div");
+				button.className = "button";
+				button.innerHTML = buttonLabel;
+				button.onclick = function(){
+					button.innerHTML = '<i class="spinner">Loading ...</i>';
+					App.refresh(function(){
+						button.innerHTML = buttonLabel;
+						UI.hideMenu();
+					});
+				};
+
+				var button2 = document.createElement("div");
+				button2.className = "button";
+				button2.innerHTML = "Configuration";
+				button2.onclick = me.editConfig;
+
+				optionsContainer.appendChild(button);
+				optionsContainer.appendChild(button2);
+
+				//if (Config.isRunningPackaged){
 				var button3 = document.createElement("div");
 				button3.className = "button";
 				button3.innerHTML = "Quit";
 				button3.onclick = me.quit;
 				optionsContainer.appendChild(button3);
-			//}
-			
-			
-			
+				//}
+			}else{
+				button = document.createElement("div");
+				button.className = "button";
+				button.innerHTML = "Login";
+				button.onclick = me.login;
+
+				optionsContainer.appendChild(button);
+			}
 		}
 	};
-	
+
 	var renderNav = function(){
-		
+
 	};
-	
+
 	var renderItems = function(){
-		
+
 	};
 
 	var setMainImage = function(e){
@@ -430,7 +473,7 @@ var UI = function(){
 		mainImage.href = this.href;
 		mainImage.style.backgroundImage = "url('"+this.href+"')";
 	};
-	
+
 	var renderCollection = function(){
 		UI.hideSearch();
 		var collection = DataProvider.getCurrentCollection();
@@ -470,7 +513,7 @@ var UI = function(){
 		if (collection.info && !collection.infoHTML){
 			collection.infoHTML = collection.info.replace(/\n/g,"<br>");
 		}
-		
+
 		collection.folders.forEach(function(f){
 			f.itemCount = 0 + (f.folders ? f.folders.length : 0) + (f.files ? f.files.length : 0);
 		});
@@ -485,7 +528,7 @@ var UI = function(){
 					})
 				}
 			}
-			
+
 			collection.folders.forEach(function(f){
 				if (f.folders){
 					addChildren(f);
@@ -494,8 +537,8 @@ var UI = function(){
 		}
 		collection.showChildren = Config.showChildren && collection.children.length;
 		collection.showGrid = !Config.showAsList;
-		
-		
+
+
 		collectionContainer.className = Config.showAsList ? "list" : "grid";
 
 		collectionContainer.innerHTML = Mustache.render(template,collection,Config);
@@ -509,9 +552,9 @@ var UI = function(){
 
 		renderMenu();
 	};
-	
+
 	EventBus.on(EVENT.COLLECTION_CHANGE,renderCollection);
-	
-	
+
+
 	return me;
 }();
