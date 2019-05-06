@@ -277,7 +277,7 @@ var HTTPserver = function(){
 						if (password !== "dummy"){
 							var filename = "users.json";
 							if (password === ""){
-								if (fs.existSync(filename))
+								if (fs.existsSync(filename))
 								try{fs.unlink(filename,function(err){
 									if (err){
 										console.log("error removing password...");
