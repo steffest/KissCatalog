@@ -92,6 +92,7 @@ Of course you can rename the "client" folder to whatever you want.
  - view-settings per folder (like some folders in grid mode, others in list mode)
  - "spotlight" some items that will be displayed on the home screen
  - private fields and images (e.g. to put the estimated value of items)
+ - link detecton in .txt files
 
 
 
