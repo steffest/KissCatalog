@@ -3,6 +3,7 @@ var Scanner = function(){
 	var me = {};
 
 	var fs = require('fs');
+	var logger = require('./logger.js');
 	
 	var queue;
 	var onDone;
@@ -10,7 +11,7 @@ var Scanner = function(){
 	var config;
 
 	me.init = function(_config,next){
-		console.log("Updating database");
+		logger.info("Updating database");
 		config = _config;
 		collectionData = {name: config.collectionName , path: ""};
 		queue = [collectionData];
@@ -21,11 +22,10 @@ var Scanner = function(){
 	function scan(){
 		if (queue.length){
 			var node = queue.shift();
-			//console.log(node);
 			node.files = node.files || [];
 			node.folders = node.folders || [];
 			node.images = node.images || [];
-			//console.log(node.path);
+			
 			fs.readdir(config.fullcollectionPath + node.path, (err, files) => {
 				if (files){
 					files.forEach(file => {
@@ -61,7 +61,6 @@ var Scanner = function(){
 									}
 
 								} else if (stats.isDirectory()){
-									//console.log(file);
 									node.folders.push(item);
 									queue.push(item);
 								}
@@ -82,7 +81,7 @@ var Scanner = function(){
 	function done(){
 		var dbPath = config.dataPath + "db.json" ;
 		fs.writeFile(dbPath, JSON.stringify(collectionData,null,2), function(err) {
-			console.log(err ? err : "done");
+			logger.info(err ? err : "done");
 			if (onDone) onDone(collectionData);
 		});
 	}

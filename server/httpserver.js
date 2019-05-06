@@ -8,6 +8,7 @@ var HTTPserver = function(){
 	var util = require('./util.js');
 	var auth = require('./auth.js');
 	var scanner = require("./scanner.js");
+	var logger = require("./logger.js");
 
 	// allowed file extensions
 	let mimeTypes = {
@@ -145,7 +146,7 @@ var HTTPserver = function(){
 						var filePath =  util.cleanPath(config.fullcollectionPath + body.path + "/info.txt");
 						fs.writeFile(filePath, body.content, "utf8" ,(err) => {
 							if (err){
-								console.log("Error writing to file " + filePath);
+								logger.error("Error writing to file " + filePath);
 								res.end("error");
 							}else{
 								res.end("ok");
@@ -160,7 +161,7 @@ var HTTPserver = function(){
 						if (body && body.filename){
 							var result = {accepted: false};
 							var ext = "." + body.filename.split(".").pop().toLowerCase();
-							console.log("file check: " + ext);
+							logger.info("file check: " + ext);
 							if (allowedFileUploadExtentions.indexOf(ext)>=0){
 								result.accepted=true;
 								result.id = Object.keys(uploadCodes).length + "_" + Math.round(Math.random()*1000000);
@@ -176,13 +177,19 @@ var HTTPserver = function(){
 					handled = true;
 					var fileInfo = uploadCodes[param];
 					if (fileInfo){
-						var filePath =  util.cleanPath(config.fullcollectionPath + fileInfo.path + "/" + fileInfo.filename);
-						console.log("Saving to " + filePath);
-						var dst = fs.createWriteStream(filePath);
-						req.pipe(dst);
-						req.on('end', function () {
-							res.end('ok');
-						});
+						var filePath =  util.cleanPath(config.fullcollectionPath + fileInfo.path + "/" + util.cleanFilename(fileInfo.filename));
+						logger.info("Saving to " + filePath);
+						
+						try{
+							var dst = fs.createWriteStream(filePath);
+							req.pipe(dst);
+							req.on('end', function () {
+								res.end('ok');
+							});
+						}catch(e){
+							logger.error("error saving file " + filePath);
+							res.end('error');
+						}
 					}else{
 						res.end('invalid upload');
 					}
@@ -195,7 +202,7 @@ var HTTPserver = function(){
 						var targetPath =  filePath + "." + new Date().getTime() + ".deleted";
 						fs.rename(filePath, targetPath, function(err){
 							if (err){
-								console.log("Failed to delete file or folder folderPath" + targetPath);
+								logger.error("Failed to delete file or folder folderPath" + targetPath);
 								res.end('error');
 							}else{
 								res.end('ok');
@@ -209,10 +216,10 @@ var HTTPserver = function(){
 					parseBody(body => {
 						var filePath =  util.cleanPath(config.fullcollectionPath + body.path + "/" + body.filename);
 						var targetPath =  util.cleanPath(config.fullcollectionPath + body.path + "/" + util.cleanFilename(body.newfilename));
-						console.log("rename " + filePath + " to " + targetPath);
+						logger.info("rename " + filePath + " to " + targetPath);
 						fs.rename(filePath, targetPath, function(err){
 							if (err){
-								console.log("Failed to rename file or folder folderPath" + targetPath);
+								logger.error("Failed to rename file or folder folderPath" + targetPath);
 								res.end('error');
 							}else{
 								res.end('ok');
@@ -227,7 +234,7 @@ var HTTPserver = function(){
 						var folderPath =  util.cleanPath(config.fullcollectionPath + body.path + "/" + body.filename);
 						fs.mkdir(folderPath,function(err){
 							if (err){
-								console.log("Failed to create folder folderPath" + folderPath);
+								logger.error("Failed to create folder folderPath" + folderPath);
 								res.end('error');
 							}else{
 								res.end('ok');
@@ -237,7 +244,7 @@ var HTTPserver = function(){
 				}
 
 				if (action === "updateconfig"){
-					console.log("Updating config");
+					logger.info("Updating config");
 					handled = true;
 					parseBody(body => {
 						let configPath = config.dataPath + "config.json";
@@ -271,8 +278,8 @@ var HTTPserver = function(){
 						if (!util.isFullPath(config.fullcollectionPath)) config.fullcollectionPath =  config.appDir + config.fullcollectionPath;
 						config.fullcollectionPath = util.addSlash(config.fullcollectionPath);
 						
-						console.log("Collection path is now " + config.fullcollectionPath);
-						console.log("writing config to " + configPath);
+						logger.info("Collection path is now " + config.fullcollectionPath);
+						logger.info("writing config to " + configPath);
 
 						if (password !== "dummy"){
 							var filename = "users.json";
@@ -280,13 +287,13 @@ var HTTPserver = function(){
 								if (fs.existsSync(filename))
 								try{fs.unlink(filename,function(err){
 									if (err){
-										console.log("error removing password...");
+										logger.info("error removing password...");
 									}else{
-										console.log("password removed.");
-									}})}catch (e){console.log("error removing password...");}
+										logger.info("password removed.");
+									}})}catch (e){logger.error("error removing password...");}
 							}else{
 								// the password is stored (as hash) in the same dir as the main server - don't expose this if you put this on a public server ...
-								fs.writeFile(filename,JSON.stringify({user: password}),"utf8",function(err){console.log("password updated");});
+								fs.writeFile(filename,JSON.stringify({user: password}),"utf8",function(err){logger.info("password updated");});
 							}
 
 						}
