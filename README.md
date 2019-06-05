@@ -13,7 +13,7 @@ There's a small demo collection at http://www.stef.be/collector/amiga/ (read onl
 
 ![KISS-Catalog Detail](./docs/_img/screen2.png?raw=true)
 
-### History
+### Context
 This project was born of a personal need.
 My retro computer collection was growing up to a point where I didn't know exactly what I had anymore, or where I had put it.
 Questions like "I know I have this accelerator card, but ... where the heck is it?" needed answers.
@@ -82,7 +82,7 @@ Of course you can rename the "client" folder to whatever you want.
  - Make all text files editable from the web interface  
  - ~~Add some authentication so you can also put the server online and manage everything from there~~ -> Done!
  - Make the webinterface compatible with ancient browsers (Amiga)
- - Add some image editing tools in the webinterface to quickly rotate,resize and crop images.
+ - ~~Add some image editing tools in the webinterface to quickly rotate,resize and crop images.~~ -> Done!
  - Maybe I'll package everything more neatly using Electron or something, but honestly ... you should just install Node and run it from source :-)
  - Feature requests are welcome!
 
@@ -92,8 +92,17 @@ Of course you can rename the "client" folder to whatever you want.
  - view-settings per folder (like some folders in grid mode, others in list mode)
  - "spotlight" some items that will be displayed on the home screen
  - private fields and images (e.g. to put the estimated value of items)
+ - ~~private folders~~ -> Done!
  - link detecton in .txt files
 
+
+### History:
+- V 0.03 - June 2019
+  - Authentication added
+  - Simple Image Editor added
+  - Private folders added
+- V 0.02 - May 2019
+  - First public release
 
 
 
