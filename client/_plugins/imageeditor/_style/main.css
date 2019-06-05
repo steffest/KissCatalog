@@ -1,0 +1,250 @@
+html {
+    box-sizing: border-box;
+}
+*, *:before, *:after {
+    box-sizing: inherit;
+}
+
+
+body{
+    background-color: black;
+    margin: 0;
+    padding: 0;
+    font-family: arial, Helvetica, sans-serif;
+    overflow: hidden;
+}
+#imagecontainer{
+    position: absolute;
+}
+
+#canvas{
+    position: absolute;
+}
+
+#selection{
+    z-index: 100;
+    position: absolute;
+    width: 180px;
+    height: 100px;
+    left: 50px;
+    top: 50px;
+    border: 1px dashed white;
+    box-shadow: 0 0 0 1600px rgba(0,0,0,.5);
+}
+
+#selection:hover{
+    cursor: move;
+}
+
+#selection .inner{
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    overflow: hidden;
+}
+
+#selection .label{
+    color: white;
+    font-size: 12px;
+    background-color: rgba(0, 0, 0, 0.5);
+    padding-top: 4px;
+    text-align: center;
+    position: absolute;
+    height: 20px;
+    width: 150px;
+    top: 50%;
+    left: 50%;
+    margin-top: -10px;
+    margin-left: -75px;
+
+}
+
+.corner_br{
+    border: 2px solid white;
+    position: absolute;
+    background-color: #29a8ff;
+    border-radius: 16px;
+    right: -16px;
+    bottom: -16px;
+    width: 32px;
+    height: 32px;
+    color: white;
+    font-size: 14px;
+    text-align: center;
+    padding-top: 6px;
+}
+
+.corner_br:hover{
+    cursor: nwse-resize;
+    background-color: #42baff;
+}
+
+.controls{
+    z-index: 10000;
+    position: absolute;
+    background-color: black;
+    height: 100px;
+    width: 100%;
+    bottom: 0;
+    opacity: 0.7;
+}
+
+.button{
+    float: left;
+    width: 20%;
+    height: 100%;
+    background-color: #5b5b5b;
+    text-align: center;
+    color: white;
+    font-size: 12px;
+    padding-top: 20px;
+
+    -webkit-touch-callout:none;
+    -webkit-user-select:none;
+    -moz-user-select:none;
+    -ms-user-select:none;
+    user-select:none;
+}
+
+.button i{
+    font-size: 32px;
+    display: block;
+    margin-bottom: 8px;
+}
+
+.button:hover{
+    cursor: pointer;
+    background-color: #363636;
+}
+
+.button.ok{
+    background-color: #438643;
+}
+
+.button.ok:hover{
+    background-color: #326432;
+}
+
+
+.button.ok2{
+    background-color: #59a54c;
+}
+
+.button.ok2:hover{
+    background-color: #326432;
+}
+
+.hidden{
+    display: none;
+}
+
+#controls_ok .button{
+    width: 50%;
+}
+
+.dialog{
+    position: absolute;
+    background-color: black;
+    z-index: 1000;
+    color: white;
+    opacity: 0.8;
+}
+
+.dialog.full{
+    top: 50px;
+    left: 50px;
+    right: 50px;
+    bottom: 120px;
+    border-radius: 20px;
+    padding-top: 10%;
+    border: 2px solid white;
+}
+
+.dialog.bottom{
+    left:0;
+    right: 0;
+    bottom: 100px;
+    height: 160px;
+}
+
+.dialog label{
+    display: inline-block;
+    width: 30%;
+    text-align: right;
+    padding-right: 10px;
+    font-size: 20px;
+}
+
+.dialog input{
+    padding: 10px;
+    border: none;
+    width: 60%;
+    margin-bottom: 10px;
+}
+
+.dialog .inlineinput{
+    text-align: center;
+    padding: 20px 10px;
+}
+
+.dialog .inlineinput input{
+    width: 40%;
+    max-width: 200px;
+}
+
+input.alignright{
+    text-align: right;
+}
+
+
+.dialog .presets{
+    position: absolute;
+    height: 70px;
+    background-color: black;
+    width: 100%;
+    bottom: 0;
+}
+
+.dialog .presets h2{
+    margin: -20px 0 0 0;
+    padding: 0;
+    font-size: 16px;
+    text-align: center;
+    font-weight: normal;
+}
+
+.dialog .presets .preset{
+    float: left;
+    width: 12.5%;
+    height: 100%;
+    text-align: center;
+    color: white;
+    font-size: 12px;
+    padding-top: 20px;
+
+    -webkit-touch-callout:none;
+    -webkit-user-select:none;
+    -moz-user-select:none;
+    -ms-user-select:none;
+    user-select:none;
+}
+
+.dialog .presets .preset:hover{
+    background-color: #252525;
+    cursor: pointer;
+}
+
+.dialog.full .presets{
+    border-radius: 0 0 20px 20px;
+}
+
+.dialog.full .presets .preset:first-of-type{
+    border-radius: 0 0 0 20px;
+}
+
+.dialog.full .presets .preset:last-of-type{
+    border-radius: 0 0 20px 0;
+}
+

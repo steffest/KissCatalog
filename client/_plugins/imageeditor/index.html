@@ -1,0 +1,67 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1">
+
+    <title></title>
+
+    <link rel="stylesheet" href="_style/fontawesome4.6.3/css/font-awesome.css">
+
+    <link rel="stylesheet" href="_style/main.css?v0.0.9">
+
+    <!-- (multi) touch - drag and drop -->
+    <script language="javascript" type="text/javascript" src="_script/lib/touch.js"></script>
+    <script language="javascript" type="text/javascript" src="_script/lib/fetchService.js?v0.0.9"></script>
+    <script language="javascript" type="text/javascript" src="_script/lib/util.js"></script>
+    <script language="javascript" type="text/javascript" src="_script/main.js?v0.0.9"></script>
+
+</head>
+
+<body onload="ImageEditor.init()">
+<div id="container">
+    <div id="imagecontainer">
+        <div id="selection" class="selectionrect hidden">
+            <div class="inner">
+                <div class="label"></div>
+            </div>
+            <div class="corner_br" id="dragselection"><i class="fa fa-expand fa-flip-horizontal"></i> </div>
+        </div>
+        <canvas id="canvas"></canvas>
+    </div>
+    <div class="controls hidden" id="controls_ok">
+        <div class="button ok" id="ok"><i class="fa fa-check"></i>OK</div>
+        <div class="button cancel" id="cancel"><i class="fa fa-remove"></i>Cancel</div>
+    </div>
+    <div class="controls" id="controls">
+        <div class="button" id="crop"><i class="fa fa-crop"></i>Crop</div>
+        <div class="button" id="rotate"><i class="fa fa-rotate-right"></i>Rotate</div>
+        <div class="button" id="resize"><i class="fa fa-expand"></i>Resize</div>
+        <div class="button ok" id="save"><i class="fa fa-check"></i>Save</div>
+        <div class="button ok2" id="saveas"><i class="fa fa-plus"></i>Save as</div>
+    </div>
+    <div id="dialog_resize" class="dialog bottom hidden">
+            <div class="inlineinput">
+                <input type="text" id="width" class="alignright"> W x H <input type="text" id="height" class="right">
+            </div>
+
+           <div class="presets">
+               <h2>Presets</h2>
+               <div class="preset">100%</div>
+               <div class="preset">50%</div>
+               <div class="preset">1600</div>
+               <div class="preset">1200</div>
+               <div class="preset">1000</div>
+               <div class="preset">800</div>
+               <div class="preset">400</div>
+               <div class="preset">200</div>
+           </div>
+    </div>
+
+</div>
+
+</body>
+
+
+</html>
