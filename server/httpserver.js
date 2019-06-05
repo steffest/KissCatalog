@@ -13,6 +13,7 @@ var HTTPserver = function(){
 	// allowed file extensions
 	let mimeTypes = {
 		'.html': {isBinary: false, type: 'text/html'},
+		'.txt':  {isBinary: false, type: 'text/plain'},
 		'.css':  {isBinary: false, type: 'text/css'},
 		'.js':   {isBinary: false, type: 'text/javascript'},
 		'.json': {isBinary: false, type: 'application/json'},
@@ -32,7 +33,7 @@ var HTTPserver = function(){
 	var uploadCodes = {};
 
 	me.init = function(config){
-		http.createServer(function (req, res) {
+		var server = http.createServer(function (req, res) {
 
 			var reqUrl = req.url;
 			reqUrl = reqUrl.split("?")[0];
@@ -69,7 +70,12 @@ var HTTPserver = function(){
 					}
 
 					if (param === "db.json"){
-						serveStatic(param,res,config.dataPath);
+						//serveStatic(param,res,config.dataPath);
+
+						res.writeHead(200, {'Content-Type': mimeTypes['.json']});
+						res.end(JSON.stringify(scanner.getData(auth.isAuthenticated(req,res))));
+						
+						
 						return;
 					}
 				}
@@ -190,6 +196,53 @@ var HTTPserver = function(){
 							logger.error("error saving file " + filePath);
 							res.end('error');
 						}
+					}else{
+						res.end('invalid upload');
+					}
+				}
+
+				if (action === "uploadbase64"){
+					handled = true;
+					var fileInfo = uploadCodes[param];
+					if (fileInfo){
+						parseBody(body => {
+
+							var filePath =  util.cleanPath(config.fullcollectionPath + fileInfo.path + "/" + util.cleanFilename(fileInfo.filename));
+							
+							if (body.saveas){
+								fileInfo.filename = fileInfo.filename.replace(".","_2.");
+								filePath =  util.cleanPath(config.fullcollectionPath + fileInfo.path + "/" + util.cleanFilename(fileInfo.filename));
+								if (fs.existsSync(filePath)){
+									fileInfo.filename = fileInfo.filename.replace("_2.","_"+ new Date().getTime() +".");
+									filePath =  util.cleanPath(config.fullcollectionPath + fileInfo.path + "/" + util.cleanFilename(fileInfo.filename));
+								}
+							}
+							
+							logger.info("Saving to " + filePath);
+							
+							
+							try{
+								var base64Data = body.img.split(';base64,').pop();
+
+								fs.writeFile(filePath, base64Data, {encoding: 'base64'}, function(err) {
+									res.writeHead(200, {'Content-Type': mimeTypes['.json']});
+									res.end(JSON.stringify({
+										success: !err,
+										redirectUrl : "/#/" + fileInfo.path
+									}));
+									
+									if (body.saveas){
+										console.log("refreshing database");
+										scanner.init(config);
+									}
+								});
+								
+							}catch(e){
+								logger.error("error saving file " + filePath);
+								res.end('error');
+							}
+							
+						});
 					}else{
 						res.end('invalid upload');
 					}
@@ -325,9 +378,7 @@ var HTTPserver = function(){
 				res.writeHead(404, {'Content-Type': 'text/html'});
 				res.end("unkown action");
 			}
-
-
-
+			
 		}).listen(config.port);
 
 

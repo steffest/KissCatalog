@@ -6,11 +6,14 @@
     right: 0;
     background-color: rgba(0, 0, 0, 0.6);
     z-index: 10000;
-    display: none;
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
 }
 
 #blanket.active{
-    display: block;
+    visibility: visible;
+    opacity: 1;
 }
 
 #blanket #dialog{
@@ -21,6 +24,7 @@
     margin-top: 100px;
     color: white;
     box-shadow: 0 0 12px black;
+    display: none;
 }
 
 #blanket #dialog .buttons{
@@ -64,3 +68,46 @@
     background-color: #c4ccd1;
     border: 1px solid #415667;
 }
+
+#blanket #popupmenu{
+    background-color: #cad6dc;
+    position: absolute;
+    width: 100px;
+    height: auto;
+    box-shadow: 1px 1px 4px 0 black;
+    display: none;
+}
+
+#blanket.popup{
+    background-color: rgba(0, 0, 0, 0.3);
+}
+
+#blanket.popup #popupmenu{
+    display: block;
+}
+#blanket.dialog #dialog{
+    display: block;
+}
+
+#blanket #popupmenu .button{
+    display: block;
+    border: none;
+    border-bottom: 1px solid silver;
+    color: black;
+    opacity: 0.8;
+}
+
+#blanket #popupmenu .button:hover{
+    background-color: #dcedf5;
+}
+
+@keyframes fade {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+

@@ -6,6 +6,19 @@
     margin: 0;
 }
 
+#collection .tag{
+    font-family: 'Saira', sans-serif;
+    font-size: 11px;
+    display: inline-block;
+    border: 1px solid white;
+    border-radius: 10px;
+    padding: 1px 8px;
+    opacity: 0.8;
+    position: relative;
+    vertical-align: top;
+    margin-left: 8px;
+}
+
 #items{
     margin-top: 20px;
 }
@@ -24,6 +37,8 @@
     transition: box-shadow 0.2s ease-in-out;
     line-height: 12px;
 }
+
+
 
 #collection.grid #items a.additem{
     background-color: transparent;
@@ -182,6 +197,20 @@
     position: relative;
 }
 
+
+#images a.image.private:before,
+#collection.grid #items a.private:before{
+    content: "";
+    width: 20px;
+    height: 20px;
+    position: absolute;
+    z-index: 100;
+    background-image: url("../_img/keyhole.svg");
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: top left;
+}
+
 #images a.image span{
     display: block;
     position: absolute;
@@ -223,6 +252,14 @@
     background-position: center center;
 }
 
+
+.iconbutton.menu{
+    background-repeat: no-repeat;
+    background-image: url("../_img/caret-down.svg");
+    background-size: 12px 12px;
+    background-position: center center;
+}
+
 #images a.image:hover .iconbutton:hover,
 .iconbutton:hover{
     opacity: 1;
@@ -260,6 +297,7 @@
     top: 10px;
 }
 
+.button,
 #collection .button{
     background-color: transparent;
     margin: 0;
@@ -277,6 +315,7 @@
     display: none;
 }
 
+.button:hover,
 #collection .button:hover{
     opacity: 1;
     cursor: pointer;

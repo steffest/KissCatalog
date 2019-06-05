@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="72px" height="71px" viewBox="0 0 72 71" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 44 (41411) - http://www.bohemiancoding.com/sketch -->
+    <title>Slice 1</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="incognito" transform="translate(1.000000, 0.000000)">
+            <polygon id="Triangle" fill-opacity="0.6" fill="#000000" transform="translate(35.000000, 35.827303) rotate(180.000000) translate(-35.000000, -35.827303) " points="70 0.654606802 70 71 0 71"></polygon>
+            <path d="M41.6920929,37.3283044 L43.6390533,35.5964407 C46.0814563,33.42387 47.5,30.3316278 47.5,27 C47.5,20.6487254 42.3512746,15.5 36,15.5 C29.6487254,15.5 24.5,20.6487254 24.5,27 C24.5,30.4213449 25.9969085,33.5892789 28.5545839,35.7648827 L30.5410046,37.4545671 L27.0175468,56.3336873 L45.6627009,56.3336873 L41.6920929,37.3283044 Z M56.7372991,65.3336873 L16.1824532,65.3336873 L20.7746123,40.7283337 C17.4214648,37.0133966 15.5,32.159402 15.5,27 C15.5,15.6781626 24.6781626,6.5 36,6.5 C47.3218374,6.5 56.5,15.6781626 56.5,27 C56.5,31.9999611 54.6958029,36.7160593 51.5256382,40.3879834 L56.7372991,65.3336873 Z" id="Combined-Shape" stroke-opacity="0.471410779" stroke="#020202" fill="#FFFFFF" fill-rule="nonzero"></path>
+        </g>
+    </g>
+</svg>

@@ -30,7 +30,7 @@ var Auth = function(){
         var _5_minutes = 1000 * 60 * 5;
         var _10_days = 1000 * 60 * 60 * 24 * 10;
 
-        console.log("loggin in ...");
+        console.log("logging in ...");
 
         if (user && data){
             var challenge = parseInt(data.challenge);

@@ -12,6 +12,7 @@ var UI = function(){
 	var editor;
 	var blanket;
 	var dialog;
+	var popupmenu;
 
 	me.init = function(next){
 		collectionContainer = document.getElementById("collection");
@@ -25,6 +26,7 @@ var UI = function(){
 		optionsContainer = document.getElementById("options");
 		blanket = document.getElementById("blanket");
 		dialog = document.getElementById("dialog");
+		popupmenu = document.getElementById("popupmenu");
 
 		FetchService.json("_data/config.json",function(result){
 			if (result){
@@ -35,6 +37,8 @@ var UI = function(){
 
 			Config.hasBackend = !!Config.hasBackend;
 			if (Config.staticCollectionUrl) Config.collectionUrl = Config.staticCollectionUrl;
+			if (Config.staticCollectionUrlPublic && !Config.hasBackend) Config.collectionUrl = Config.staticCollectionUrlPublic;
+			console.error(Config.collectionUrl);
 			renderFooter();
 			renderOptions();
 
@@ -44,7 +48,12 @@ var UI = function(){
 			}
 
 			if (next) next();
-		})
+		});
+
+		blanket.onclick = function(){
+			if (blanket.classList.contains("popup")) me.hideDialog();
+		};
+
 	};
 
 	me.toggleOption = function(elm){
@@ -251,6 +260,40 @@ var UI = function(){
 
 	};
 
+	me.itemPopupMenu = function(event,type,filename,path){
+
+		if (event && event.preventDefault){
+			event.preventDefault();
+			event.stopPropagation();
+		}
+		
+		
+		var menu = document.createElement("div");
+		menu.innerHTML = "test";
+		menu.className = "submenu";
+
+		var pos = getOffset(event.target,true);
+		var config = {
+			x: parseInt(pos.left),
+			y: parseInt(pos.top) + 20,
+			items:[
+				{label: "Rename", onclick: function(){UI.renameFile(event,filename,path)}},
+				{label: filename.indexOf("_private")>0 ? "Make public" : "Make private", onclick: function(){UI.toggleFlag(event,"private",filename,path)}},
+				{label: "Delete", onclick: function(){UI.deleteFile(event,filename,path)}}
+			]
+		};
+		
+		
+		if (type === "image"){
+			config.items.splice(1,0,{label: "Edit Image", onclick: function(){UI.editImage(event,filename,path)}});
+		}
+		me.showPopup(config);
+
+		var button = event.target;
+		console.log(event);
+		console.log(event.target);
+	};
+
 	me.deleteFile = function(event,filename,path){
 		if (event && event.preventDefault){
 			event.preventDefault();
@@ -291,8 +334,6 @@ var UI = function(){
 			path = path.join("/");
 		}
 
-		console.error(path);
-
 		me.showDialog({
 			caption: "Rename File",
 			intro: "Enter the new name",
@@ -308,6 +349,57 @@ var UI = function(){
 						}
 					})
 				}
+			}
+		})
+	};
+
+	me.editImage = function(event,filename,path){
+		if (path && path.indexOf(filename)>=0){
+			path = path.split("/");
+			path.pop();
+			path = path.join("/");
+		}
+
+		path = path || DataProvider.getCurrentCollection().path;
+		var fullUrl = Config.collectionUrl + path + "/" + filename;
+
+		DataProvider.prepareFile(filename,path,function(result){
+			if (result.success){
+				var editUrl = "_plugins/imageeditor/index.html";
+				editUrl += "?f=" + encodeURIComponent(fullUrl);
+				editUrl += "?callback=" + encodeURIComponent("/uploadbase64/" + result.id);
+				window.location.href = editUrl;
+			}
+		});
+		
+	};
+
+	me.toggleFlag = function(event,flag,filename,path){
+		
+		if (path && path.indexOf(filename)>=0){
+			path = path.split("/");
+			path.pop();
+			path = path.join("/");
+		}
+		
+		var newName = filename;
+		if (newName.indexOf("_" + flag)>0){
+			newName = newName.replace("_" + flag,"");
+		}else{
+			var parts = newName.split(".");
+			if (parts.length>1){
+				var ext = parts.pop();
+				newName = parts.join(".") + "_" + flag + "." + ext;
+			}else{
+				newName += "_" + flag;
+			}
+		}
+		
+		DataProvider.renameFile(filename,newName,path,function(result){
+			if (result.success){
+				App.refresh();
+			}else{
+				me.showDialog("Something went wrong");
 			}
 		})
 	};
@@ -350,6 +442,7 @@ var UI = function(){
 		})
 	};
 
+
 	me.showDialog = function(config){
 		if (typeof config === "string"){
 			config={intro: config}
@@ -384,11 +477,29 @@ var UI = function(){
 			buttons.appendChild(cancel);
 		}
 		dialog.appendChild(buttons);
-		blanket.className = "active";
+		blanket.className = "active dialog";
 	};
 
 	me.hideDialog = function(){
 		blanket.className = "";
+	};
+
+	me.showPopup = function(config){
+		popupmenu.style.left = config.x + "px";
+		popupmenu.style.top = config.y + "px";
+
+		popupmenu.innerHTML = "";
+		if (config.items){
+			config.items.forEach(function(item){
+				var button = createElm("div","button",item.label);
+				button.onclick = item.onclick;
+				popupmenu.appendChild(button);
+			});
+		}
+
+		blanket.className = "active popup";
+
+
 	};
 
 	me.quit = function(){
@@ -397,6 +508,17 @@ var UI = function(){
 		});
 	};
 
+	
+	var getCondensedName = function(s){
+		if (s){
+			if (s.indexOf("_private")>0) s=s.replace("_private","");
+		}
+		return s;
+	};
+
+	var getExpandedName = function(s){
+
+	};
 
 	var renderMenu = function(){
 		breadCrumb.innerHTML = "";
@@ -404,7 +526,7 @@ var UI = function(){
         var currentPath = "";
         path.forEach(function(item){
             var a = document.createElement("a");
-            a.innerHTML = item || Config.collectionName;
+            a.innerHTML = getCondensedName(item) || Config.collectionName;
             if (item) currentPath += "/" + item;
             a.href="#" + currentPath;
             breadCrumb.appendChild(a);
@@ -421,9 +543,7 @@ var UI = function(){
 
 			if (Config.isAuthenticated){
 				var buttonLabel = "Rebuild Database";
-				var button = document.createElement("div");
-				button.className = "button";
-				button.innerHTML = buttonLabel;
+				var button = createElm("div","button",buttonLabel);
 				button.onclick = function(){
 					button.innerHTML = '<i class="spinner">Loading ...</i>';
 					App.refresh(function(){
@@ -432,39 +552,26 @@ var UI = function(){
 					});
 				};
 
-				var button2 = document.createElement("div");
-				button2.className = "button";
-				button2.innerHTML = "Configuration";
+				var button2 = createElm("div","button","Configuration");
 				button2.onclick = me.editConfig;
 
 				optionsContainer.appendChild(button);
 				optionsContainer.appendChild(button2);
 
 				//if (Config.isRunningPackaged){
-				var button3 = document.createElement("div");
-				button3.className = "button";
-				button3.innerHTML = "Quit";
+				var button3 = createElm("div","button","Quit");
 				button3.onclick = me.quit;
 				optionsContainer.appendChild(button3);
 				//}
 			}else{
-				button = document.createElement("div");
-				button.className = "button";
-				button.innerHTML = "Login";
+				button = createElm("div","button","Login");
 				button.onclick = me.login;
 
 				optionsContainer.appendChild(button);
 			}
 		}
 	};
-
-	var renderNav = function(){
-
-	};
-
-	var renderItems = function(){
-
-	};
+	
 
 	var setMainImage = function(e){
 		e.preventDefault();
@@ -516,7 +623,15 @@ var UI = function(){
 
 		collection.folders.forEach(function(f){
 			f.itemCount = 0 + (f.folders ? f.folders.length : 0) + (f.files ? f.files.length : 0);
+			f.private = !!f.private;
 		});
+
+		if (collection.images){
+			collection.images.forEach(function(f){
+				f.private = !!f.private;
+			});
+		}
+		
 
 		// Add all items from children if needed
 		if (Config.showChildren && !collection.noChildren && collection.children.length === 0){
@@ -552,6 +667,27 @@ var UI = function(){
 
 		renderMenu();
 	};
+
+	function getOffset(elm,fixed){
+		var rect = elm.getBoundingClientRect(),
+			scrollLeft = window.pageXOffset || document.documentElement.scrollLeft,
+			scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+		
+		if (fixed){
+			scrollLeft = 0;
+			scrollTop = 0;
+		}
+		
+		return { top: rect.top + scrollTop, left: rect.left + scrollLeft };
+	}
+
+	function createElm(type,className,innerHTML,id){
+		var elm = document.createElement(type);
+		if (className) elm.className = className;
+		if (id) elm.id = className;
+		if (innerHTML) elm.innerHTML = innerHTML;
+		return elm;
+	}
 
 	EventBus.on(EVENT.COLLECTION_CHANGE,renderCollection);
 

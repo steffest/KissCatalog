@@ -8,15 +8,22 @@ var Scanner = function(){
 	var queue;
 	var onDone;
 	var collectionData;
+	var collectionDataPublic;
 	var config;
+	var hasPrivate;
 
 	me.init = function(_config,next){
 		logger.info("Updating database");
 		config = _config;
 		collectionData = {name: config.collectionName , path: ""};
+		hasPrivate = false;
 		queue = [collectionData];
 		onDone = next;
 		scan();
+	};
+	
+	me.getData = function(authenticated){
+		return (authenticated ? collectionData : collectionDataPublic);
 	};
 
 	function scan(){
@@ -38,6 +45,11 @@ var Scanner = function(){
 								created: stats.birthtime,
 								path: thisPath
 							};
+							
+							if (file.indexOf("_private")>0){
+								item.private = true;
+								hasPrivate = true;
+							}
 
 							var ext = file.split(".").pop().toLowerCase();
 
@@ -79,11 +91,46 @@ var Scanner = function(){
 	}
 
 	function done(){
+		
+		console.log("hasPrivate: " + hasPrivate);
+
+		collectionDataPublic = hasPrivate ? copyPublic(collectionData) : collectionData;
+		
 		var dbPath = config.dataPath + "db.json" ;
-		fs.writeFile(dbPath, JSON.stringify(collectionData,null,2), function(err) {
+		fs.writeFile(dbPath, JSON.stringify(collectionDataPublic,null,2), function(err) {
 			logger.info(err ? err : "done");
 			if (onDone) onDone(collectionData);
 		});
+	}
+
+	function copyPublic(node){
+		var item = {
+			files:[],
+			folders:[],
+			images:[]
+		};
+		Object.keys(node).forEach(function(key){
+			switch (key) {
+				case "files":
+					node.files.forEach(function(file){
+						if (!file.private) item.files.push(file);
+					});
+					break;
+				case "images":
+					node.images.forEach(function(file){
+						if (!file.private) item.images.push(file);
+					});
+					break;
+				case "folders":
+					node.folders.forEach(function(folder){
+						if (!folder.private) item.folders.push(copyPublic(folder));
+					});
+					break;
+				default:
+					item[key] = node[key];
+			}
+		});
+		return item;
 	}
 
 	return me;

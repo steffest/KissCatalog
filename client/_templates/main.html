@@ -1,6 +1,6 @@
 <!--collection-->
 <div class="collection {{#virtual}}virtual{{/virtual}}">
-<h2>{{name}}</h2>
+<h2>{{displayName}} {{#private}}<span class="tag">Private</span>{{/private}}</h2>
 <div id="itemcontent">
     <div id="infocol" {{^hasInfocol}}class="noinfo"{{/hasInfocol}}>
         {{#images.length}}
@@ -8,10 +8,9 @@
             <a id="mainimage" style="background-image: url('{{>collectionUrl}}{{path}}/{{mainImage}}')" href="{{>collectionUrl}}{{path}}/{{mainImage}}" target="_blank"></a>
             <div class="images" id="thumbs">
                 {{#images}}
-                <a href="{{>collectionUrl}}{{path}}" target="_blank" class="image" style="background-image: url('{{>collectionUrl}}{{path}}')">
-                    <div class="iconbutton delete" onclick="UI.deleteFile(event,'{{name}}')" title="Delete">x</div>
-                    <div class="iconbutton rename" onclick="UI.renameFile(event,'{{name}}')" title="Rename"></div>
-                    <span>{{name}}</span>
+                <a href="{{>collectionUrl}}{{path}}" target="_blank" class="image {{#private}}private{{/private}}" style="background-image: url('{{>collectionUrl}}{{path}}')">
+                    <div class="iconbutton menu" onclick="UI.itemPopupMenu(event,'image','{{name}}')" title="Actions"></div>
+                    <span>{{displayName}}</span>
                 </a>
                 {{/images}}
             </div>
@@ -35,7 +34,7 @@
     <div id="files">
         <h4>Files</h4>
         {{#visibleFiles}}
-        <a href="{{>collectionUrl}}{{path}}" target="_blank">{{name}}
+        <a href="{{>collectionUrl}}{{path}}" target="_blank">{{displayName}}
             <div class="iconbutton delete" onclick="UI.deleteFile(event,'{{name}}')" title="Delete">x</div>
             <div class="iconbutton rename" onclick="UI.renameFile(event,'{{name}}')" title="Rename"></div>
         </a>
@@ -54,11 +53,10 @@
 {{#hasFolders}}
 <div id="items">
     {{#folders}}
-    <a href="#{{path}}">
-        <div class="iconbutton delete" onclick="UI.deleteFile(event,'{{name}}')" title="Delete">x</div>
-        <div class="iconbutton rename" onclick="UI.renameFile(event,'{{name}}')" title="Rename"></div>
+    <a href="#{{path}}" class="{{#private}}private{{/private}}">
+        <div class="iconbutton menu" onclick="UI.itemPopupMenu(event,'folder','{{name}}')" title="Actions"></div>
         {{#mainImage}}<figure style="background-image: url('{{>collectionUrl}}{{path}}/{{mainImage}}')"></figure>{{/mainImage}}{{#itemCount}}<i>{{itemCount}}</i>{{/itemCount}}
-        <span>{{name}}</span>
+        <span>{{displayName}}</span>
     </a>
     {{/folders}}
     <a class="additem" onclick="UI.addSubfolder()"><i></i><span>+ Add item</span></a>
@@ -70,7 +68,7 @@
         <div class="iconbutton delete" onclick="UI.deleteFile(event,'{{name}}','{{path}}')" title="Delete">x</div>
         <div class="iconbutton rename" onclick="UI.renameFile(event,'{{name}}','{{path}}')" title="Rename"></div>
         {{#mainImage}}<figure style="background-image: url('{{>collectionUrl}}{{path}}/{{mainImage}}')"></figure>{{/mainImage}}
-        <span>{{name}}</span></a>
+        <span>{{displayName}}</span></a>
     {{/children}}
     {{/showChildren}}
 </div>

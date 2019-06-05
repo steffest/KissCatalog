@@ -95,6 +95,23 @@ var DataProvider = function(){
 		});
 	};
 
+	me.prepareFile = function(filename,path,next){
+		var data = {
+			filename: filename,
+			path: path || currentCollection.path
+		};
+
+		FetchService.post("/uploadinit/",JSON.stringify(data),function(result){
+			result = parseJson(result);
+			if (result.accepted){
+				result.success=true;
+				next(result);
+			}else{
+				next({success:false, error:"Files of this type are not allowed"});
+			}
+		});
+	};
+
 	me.updateConfig = function(data,next){
 		FetchService.post("/updateconfig",JSON.stringify(data),function(result){
 			console.log(result);
@@ -166,6 +183,9 @@ var DataProvider = function(){
     };
     
     
+    function getDisplayName(item){
+    	return item.private?item.name.replace("_private",""):item.name;
+	}
     
 	function buildFlatFolders(){
         flatFolders  = [];
@@ -178,17 +198,26 @@ var DataProvider = function(){
                     if (item.files){
                         item.files.forEach(function(file){
                             if (file.lastModified>item.contentModified) item.contentModified=file.lastModified;
+							file.displayName = getDisplayName(file);
                         })
                     }
+
+					if (item.images){
+						item.images.forEach(function(file){
+							file.displayName = getDisplayName(file);
+						})
+					}
+					
+					item.displayName = getDisplayName(item);
 
                     flatFolders.push(item);
                     scan(item);
                 })
             }
+            
         }
         scan(collection);
-        
-        
+		collection.displayName = collection.name;
     }
 
 	function parseJson(s){
