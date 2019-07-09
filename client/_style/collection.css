@@ -278,6 +278,58 @@
     opacity: 0.7;
 }
 
+#infoproperties{
+    display: flex;
+}
+
+#properties.hasproperties,
+#properties.haseditor{
+    flex-grow: 1;
+    margin-right: 10px;
+}
+
+
+#properties table{
+    margin-top: 10px;
+    border-collapse: collapse;
+    border-spacing:0;
+    border: 1px solid rgba(0, 0, 0, 0.36);
+    width: 100%;
+}
+
+#properties td{
+    color: white;
+    font-size: 11px;
+    background-color: rgba(0, 0, 0, 0.1);
+    padding: 5px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.36);
+    vertical-align: top;
+}
+
+
+#properties td.label{
+    background-color: rgba(0, 0, 0, 0.3);
+    color: #d1d1d1;
+    white-space: nowrap;
+}
+
+#properties td.value{
+    min-width: 200px;
+}
+
+#properties td.editor{
+    background-color: #1c242b;
+    padding: 0;
+}
+
+#properties td.editor input{
+    background-color: transparent;
+    border: none;
+    color: #9199a0;
+    width: 100%;
+    padding: 5px;
+}
+
 #info.content{
     font-size: 11px;
     border: 1px solid rgba(0, 0, 0, 0.36);
@@ -285,6 +337,12 @@
     margin-top: 10px;
     background-color: rgba(0, 0, 0, 0.1);
     position: relative;
+    width: 100%;
+}
+
+#info.content.properties{
+    flex-grow: 2;
+    width: auto;
 }
 
 #info.content.editor{
@@ -402,6 +460,7 @@
     padding: 4px 16px 4px 4px;
     transition: background-color 0.2s ease-in-out;
     position: relative;
+    white-space: nowrap;
 }
 
 #files a:hover{
@@ -443,5 +502,4 @@ body.static .onlyadmin{
 body.static .noadmin{
     display: block;
 }
-
 

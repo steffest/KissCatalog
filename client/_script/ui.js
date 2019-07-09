@@ -38,7 +38,9 @@ var UI = function(){
 			Config.hasBackend = !!Config.hasBackend;
 			if (Config.staticCollectionUrl) Config.collectionUrl = Config.staticCollectionUrl;
 			if (Config.staticCollectionUrlPublic && !Config.hasBackend) Config.collectionUrl = Config.staticCollectionUrlPublic;
-			console.error(Config.collectionUrl);
+			Config.properties = Config.properties || [];
+			
+			//console.error(Config.collectionUrl);
 			renderFooter();
 			renderOptions();
 
@@ -64,9 +66,19 @@ var UI = function(){
 	};
 
 	me.editConfig = function(){
+
+		buildOptions = function(list) {
+			list.forEach(function(item){
+				item["is" + item.type] = true;
+				item.privateString = item.private?"Yes":"No";
+			});
+		};
+		
+		
 		me.hideMenu();
 		breadCrumb.innerHTML = "";
 		if (Config.hasBackend){
+			buildOptions(Config.properties);
 			collectionContainer.innerHTML=Mustache.render(Template.get("config"),Config);
 		}else{
 			document.body.innerHTML=Mustache.render(Template.get("noconfig"),Config);
@@ -97,6 +109,27 @@ var UI = function(){
 			if (data.password && data.password !== "dummy"){
 				data.password = md5(data.password)
 			}
+			
+			data.properties = [];
+			var properties = configform.querySelectorAll(".configproperty");
+			for (i = 0; i<properties.length; i++){
+				var row = properties[i];
+				var name = row.querySelector("input").value;
+				var select = row.querySelector("select");
+				var options = row.querySelector(".propertyoptions");
+				
+				var type =  select.options[select.selectedIndex].text.toLowerCase();
+				var _private = false;
+				if (options){
+					_private = options.innerText.indexOf("Private: Yes")>=0;
+				}
+				
+				if (name){
+					data.properties.push({name: name, type: type, private: _private});
+				}
+			}
+			
+			
 
 			DataProvider.updateConfig(data,function(result){
 				if (result.success){
@@ -231,6 +264,7 @@ var UI = function(){
 	me.editInfo = function(action){
 		var infoCol = document.getElementById("infocol");
 		var infoContainer = document.getElementById("info");
+		var propertiesContainer = document.getElementById("properties");
 		var contentContainer = document.getElementById("infocontent");
 		var collection = DataProvider.getCurrentCollection();
 		var h = infoContainer.clientHeight;
@@ -239,15 +273,33 @@ var UI = function(){
 		if (action){
 			if (action === "ok"){
 				collection.info = editor.value;
+				
+				Config.properties.forEach(function(property,index){
+					var value = "";
+					var editor = document.getElementById("propertyeditor" + index);
+					if (editor){
+						var input = editor.querySelector("input");
+						if (input) value = input.value;
+					}
+					if (value){
+						collection.info = property.name + ": " + value + '\n' + collection.info;
+					}
+				});
+				
 				DataProvider.updateInfo();
 			}
-			collection.infoHTML = collection.info ? collection.info.replace(/\n/g,"<br>") : false;
+			if (propertiesContainer) propertiesContainer.classList.remove("haseditor");
+			
+			// clear generated collection cache;
+			clearCollectionCache(collection);
 			renderCollection();
 			App.refresh();
 		}else{
 			var data = collection.info || "";
+			
+			var properties = me.parseProperties(data,true);
 			editor = document.createElement("textarea");
-			editor.value = data;
+			editor.value = properties.info;
 			if (h) editor.style.height = Math.max(h,300) + "px";
 
 			contentContainer.appendChild(editor);
@@ -255,9 +307,88 @@ var UI = function(){
 			infoCol.classList.add("editor");
 			infoContainer.classList.add("content");
 			editor.focus();
+
+			if (propertiesContainer){
+				propertiesContainer.innerHTML = "";
+				propertiesContainer.classList.add("haseditor");
+
+				var list = document.createElement("table");
+				list.className = "editor";
+				properties.list.forEach(function(property,index){
+					var row = document.createElement("tr");
+					var label = document.createElement("td");
+					label.innerHTML = property.name;
+					label.className = "label";
+					label.width = "1%";
+					var editor = document.createElement("td");
+					editor.id = "propertyeditor" + index;
+					editor.className = "editor";
+					var input = document.createElement("input");
+					input.type = "text";
+					input.value = property.value;
+					editor.appendChild(input);
+					row.appendChild(label);
+					row.appendChild(editor);
+					list.appendChild(row);
+				});
+				propertiesContainer.appendChild(list);
+			}
+
+			
 			//DataProvider.updateInfo();
 		}
 
+	};
+	
+	me.parseProperties = function(info,parseAll){
+		var properties = {list: []};
+		
+		var lines = info.split('\n');
+		
+		if (Config.properties && Config.properties.length){
+			Config.properties.forEach(function(property){
+				_property = property.name.toLowerCase() + ":";
+				var found = false;
+				lines.forEach(function (line,index) {
+					_line = line.toLowerCase();
+					if (_line.indexOf(_property) === 0){
+						found = true;
+						line = line.substr(property.name.length + 1);
+						line = line.trim();
+						properties.list.push({name: property.name, value: line, type: property.type, private: !!property.private});
+						lines.splice(index, 1);
+					}
+				});
+				if (!found && parseAll){
+					properties.list.push({name: property.name, value: "", type: property.type})
+				}
+			});
+		}
+		
+		properties.info = lines.join('\n');
+		
+		return properties;
+		
+	};
+	
+	me.addProperty = function(){
+		var container = document.getElementById("config_properties");
+		var template = document.getElementById("config_properties_new");
+		if (container && template){
+			var row = document.createElement("tr");
+			row.className = "configproperty";
+			row.innerHTML = template.innerHTML;
+			container.appendChild(row);
+		}
+	};
+	
+	me.toggleProperty = function(elm){
+		var value = elm.innerHTML;
+		if (value.indexOf("No")>0){
+			elm.innerHTML = value.replace('No','Yes');
+		}else{
+			elm.innerHTML = value.replace('Yes','No');
+		}
 	};
 
 	me.itemPopupMenu = function(event,type,filename,path){
@@ -580,6 +711,13 @@ var UI = function(){
 		mainImage.href = this.href;
 		mainImage.style.backgroundImage = "url('"+this.href+"')";
 	};
+	
+	var clearCollectionCache = function(collection){
+		collection.visibleFiles = undefined;
+		collection.footerinfo = undefined;
+		collection.properties = undefined;
+		collection.infoHTML = undefined;
+	};
 
 	var renderCollection = function(){
 		UI.hideSearch();
@@ -616,9 +754,20 @@ var UI = function(){
 		collection.hasFolders = !!(collection.folders && collection.folders.length);
 		collection.hasInfocol = collection.hasInfo || !collection.hasFiles;
 		collection.children = collection.children || [];
-
-		if (collection.info && !collection.infoHTML){
-			collection.infoHTML = collection.info.replace(/\n/g,"<br>");
+		
+		var properties = {info: collection.info};
+		if (!collection.properties){
+			collection.properties = [];
+			properties = me.parseProperties(collection.info || "");
+			properties.list.forEach(function(property){
+				var passed = true;
+				if (property.private && !Config.isLoggedIn) passed = false;
+				if (passed) collection.properties.push({name: property.name, value: property.value});
+			});
+		}
+		
+		if (properties.info && !collection.infoHTML){
+			collection.infoHTML = properties.info.replace(/\n/g,"<br>");
 		}
 
 		collection.folders.forEach(function(f){
@@ -631,7 +780,9 @@ var UI = function(){
 				f.private = !!f.private;
 			});
 		}
+
 		
+
 
 		// Add all items from children if needed
 		if (Config.showChildren && !collection.noChildren && collection.children.length === 0){

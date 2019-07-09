@@ -17,16 +17,27 @@
             <div class="clear"></div>
         </div>
         {{/images.length}}
-        <div id="info" {{#infoHTML}} class="content" {{/infoHTML}}>
-            <div class="buttons">
-                <div class="button" onclick="UI.editInfo()">{{#infoHTML}}Edit{{/infoHTML}}{{^infoHTML}}Add info{{/infoHTML}}</div>
-                {{^hasFiles}}<div class="button" onclick="UI.upload()">Add Files</div>{{/hasFiles}}
-                {{^hasFolders}}<div class="button" onclick="UI.addSubfolder()">Add Sub-item</div>{{/hasFolders}}
-                <div class="button editmode" onclick="UI.editInfo('ok')">Update</div>
-                <div class="button editmode" onclick="UI.editInfo('cancel')">Cancel</div>
+        <div id="infoproperties">
+            <div id="properties" class="{{#properties.length}}hasproperties{{/properties.length}}">
+            {{#properties.length}}
+                    <table>
+                        {{#properties}}
+                        <tr><td class="label">{{name}}</td><td class="value">{{value}}</td></tr>
+                        {{/properties}}
+                    </table>
+            {{/properties.length}}
             </div>
-            <div id="infocontent">
-                {{{infoHTML}}}
+            <div id="info" {{#infoHTML}} class="content {{#properties.length}}properties{{/properties.length}}" {{/infoHTML}}>
+                <div class="buttons">
+                    <div class="button" onclick="UI.editInfo()">{{#infoHTML}}Edit{{/infoHTML}}{{^infoHTML}}Add info{{/infoHTML}}</div>
+                    {{^hasFiles}}<div class="button" onclick="UI.upload()">Add Files</div>{{/hasFiles}}
+                    {{^hasFolders}}<div class="button" onclick="UI.addSubfolder()">Add Sub-item</div>{{/hasFolders}}
+                    <div class="button editmode" onclick="UI.editInfo('ok')">Update</div>
+                    <div class="button editmode" onclick="UI.editInfo('cancel')">Cancel</div>
+                </div>
+                <div id="infocontent">
+                    {{{infoHTML}}}
+                </div>
             </div>
         </div>
     </div>
@@ -132,12 +143,43 @@ This item is not found ...<br><br>
             <div class="example"><i>For example</i><span>C:/MyFiles/Catalog or /Users/MyName/Documents/Catalog/</span></div>
         </div>
 
+        <div class="formfield">
+            <label><b>Properties</b><br>
+                A generic "info" text field is already present for each item but next to that you can specify additional fields that you want to describe for each item.<br>
+                You can add as much as you want. (If you want to remove one, just leave the name blank)
+            </label>
+            <div class="example"><i>For example</i><span>"Origin" or "Estimated Value" or "TODO" or ...</span></div>
+            <table id="config_properties">
+                <tr><th>Name</th><th>Type</th><th>Options</th></tr>
+                {{#properties}}
+                <tr class="configproperty"><td><input type="text" value="{{name}}"></td><td>
+                    <select>
+                        <option {{#istext}}selected{{/istext}}>Text</option>
+                        <option {{#isnumber}}selected{{/isnumber}}>Number</option>
+                        <option {{#isdate}}selected{{/isdate}}>Date</option>
+                    </select>
+                </td><td class="propertyoptions"><i class="button" onclick="UI.toggleProperty(this)">Private: {{privateString}}</i></td></tr>
+                {{/properties}}
+            </table>
+            <table id="config_properties_new">
+                <tr><td><input type="text"></td><td>
+                    <select>
+                        <option>Text</option>
+                        <option>Number</option>
+                        <option>Date</option>
+                    </select>
+                </td><td class="propertyoptions"><i class="button" onclick="UI.toggleProperty(this)">Private: No</i></td></tr>
+            </table>
+            <div class="button" onclick="UI.addProperty()">Add Property</div>
+
+        </div>
+
         <h4>Advanced Settings</h4>
     
         <div class="formfield">
             <label>If you plan to publish your catalog on the web, what is the root url to your files?</label>
             <input type="text" id="staticCollectionUrl" value="{{staticCollectionUrl}}" placeholder="..." class="configinput">
-            <div class="example"><i>For example</i><span>e.g. http://www.mysite.com/catalog/</span></div>
+            <div class="example"><i>For example</i><span>http://www.mysite.com/catalog/</span></div>
         </div>
 
         <div class="formfield">

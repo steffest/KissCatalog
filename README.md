@@ -97,6 +97,8 @@ Of course you can rename the "client" folder to whatever you want.
 
 
 ### History:
+- V 0.04 - July 2019
+  - Property items added
 - V 0.03 - June 2019
   - Authentication added
   - Simple Image Editor added

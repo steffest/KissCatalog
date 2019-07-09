@@ -32,7 +32,6 @@ var App = function(){
 		if (Config.showAsList) document.getElementById("option_li").classList.add("active");
 		
 		
-		
 	};
 	
 	me.refresh = function(next){

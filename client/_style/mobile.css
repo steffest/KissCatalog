@@ -1,12 +1,23 @@
 @media all and (max-width: 700px) {
-  
-
+    
     #itemcontent{
         display: block;
     }
 
     #infocol{
         padding-right: 0;
+    }
+    
+    #infoproperties{
+        display: block;
+    }
+
+    #properties td.value{
+        min-width: auto;
+    }
+    
+    #properties{
+        margin-right: 0;
     }
 }
 
