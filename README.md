@@ -70,10 +70,17 @@ in the Kiss-Catalog folder to build your binary
 
 
 ### Deploy to web.
-Put your collection files somewhere on the web so they are accessible.
-Enter this url (of your collection files) in the Kiss-Catalog config screen in the "root url" box.  
-Put the "client" folder of Kiss-Catalog on your webhost.  
-If you run from the packaged binary then copy the "client" folder (located in the same location as your binary)  there too.  
+
+If you're running from source:
+ - if your collection files are not in the default location, copy your collection folder to your webhost.
+ - Enter this url (of your collection files) in the Kiss-Catalog config screen in the "root url" box.  
+ - copy the "client" folder to your webhost
+
+If you're running from the packaged binary:
+ - download this repository
+ - copy the "client" folder to your webhost
+ - copy the "client" folder located in the same location as your binary there too, overwriting the _data and collection folder.  
+
 Your collection is now at http://your.web.host/client  (in read only mode)  
 Of course you can rename the "client" folder to whatever you want.  
 
@@ -91,7 +98,8 @@ Of course you can rename the "client" folder to whatever you want.
  - pagination
  - view-settings per folder (like some folders in grid mode, others in list mode)
  - "spotlight" some items that will be displayed on the home screen
- - private fields and images (e.g. to put the estimated value of items)
+ - ~~private fields (e.g. to put the estimated value of items)~~ -> Done!
+ - private images and files
  - ~~private folders~~ -> Done!
  - link detecton in .txt files
 
