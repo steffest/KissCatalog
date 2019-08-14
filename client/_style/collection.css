@@ -457,10 +457,27 @@
     text-decoration: none;
     border-bottom: 1px solid rgba(0, 0, 0, 0.36);
     font-size: 11px;
-    padding: 4px 16px 4px 4px;
+    padding: 4px 16px 4px 20px;
     transition: background-color 0.2s ease-in-out;
     position: relative;
     white-space: nowrap;
+}
+#files a.private{
+    opacity: 0.8;
+}
+
+#files a.private:before{
+    content: "";
+    width: 16px;
+    height: 16px;
+    position: absolute;
+    z-index: 100;
+    background-image: url("../_img/keyhole.svg");
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: top left;
+
+    margin: 0px 0 0 -20px;
 }
 
 #files a:hover{

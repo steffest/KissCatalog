@@ -45,9 +45,8 @@
     <div id="files">
         <h4>Files</h4>
         {{#visibleFiles}}
-        <a href="{{>collectionUrl}}{{path}}" target="_blank">{{displayName}}
-            <div class="iconbutton delete" onclick="UI.deleteFile(event,'{{name}}')" title="Delete">x</div>
-            <div class="iconbutton rename" onclick="UI.renameFile(event,'{{name}}')" title="Rename"></div>
+        <a href="{{>collectionUrl}}{{path}}" target="_blank" class="{{#private}}private{{/private}}">{{displayName}}
+            <div class="iconbutton menu" onclick="UI.itemPopupMenu(event,'file','{{name}}')" title="Actions"></div>
         </a>
         {{/visibleFiles}}
         <div class="buttons">

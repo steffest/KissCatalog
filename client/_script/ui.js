@@ -398,7 +398,6 @@ var UI = function(){
 			event.stopPropagation();
 		}
 		
-		
 		var menu = document.createElement("div");
 		menu.innerHTML = "test";
 		menu.className = "submenu";
@@ -736,6 +735,7 @@ var UI = function(){
 				if (file.name !== "info.txt"){
 					collection.visibleFiles.push(file);
 				}
+				file.private = !!file.private;
 			})
 		}
 
