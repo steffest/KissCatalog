@@ -29,7 +29,7 @@ var HTTPserver = function(){
 		'.pdf':  {isBinary: true, type: 'application/pdf'}
 	};
 
-	let allowedFileUploadExtentions = [".jpg",".jpeg",".png","gif",".zip",".txt",".pdf",".mp3"];
+	let allowedFileUploadExtentions = [".jpg",".jpeg",".png","gif",".svg",".zip",".txt",".pdf",".mp3",".mp4",".wav",".lha",".rar"];
 	var uploadCodes = {};
 
 	me.init = function(config){

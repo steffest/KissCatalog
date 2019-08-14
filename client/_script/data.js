@@ -198,26 +198,34 @@ var DataProvider = function(){
                     if (item.files){
                         item.files.forEach(function(file){
                             if (file.lastModified>item.contentModified) item.contentModified=file.lastModified;
-							file.displayName = getDisplayName(file);
                         })
                     }
 
-					if (item.images){
-						item.images.forEach(function(file){
-							file.displayName = getDisplayName(file);
-						})
-					}
-					
 					item.displayName = getDisplayName(item);
 
                     flatFolders.push(item);
                     scan(item);
-                })
+                });
+
+				if (parent.images){
+					parent.images.forEach(function(file){
+						file.displayName = getDisplayName(file);
+					})
+				}
+
+				if (parent.files){
+					parent.files.forEach(function(file){
+						file.displayName = getDisplayName(file);
+					})
+				}
+
+				parent.displayName = getDisplayName(parent);
             }
-            
         }
         scan(collection);
-		collection.displayName = collection.name;
+
+
+
     }
 
 	function parseJson(s){

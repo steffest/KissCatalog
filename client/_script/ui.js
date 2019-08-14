@@ -399,7 +399,7 @@ var UI = function(){
 		}
 		
 		var menu = document.createElement("div");
-		menu.innerHTML = "test";
+		menu.innerHTML = "";
 		menu.className = "submenu";
 
 		var pos = getOffset(event.target,true);
