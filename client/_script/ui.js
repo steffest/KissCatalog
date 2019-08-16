@@ -257,6 +257,14 @@ var UI = function(){
 		DataProvider.setCurrentCollection(list);
 	};
 
+	me.showGrid = function(){
+		Grid.generate();
+	};
+
+	me.hideGrid = function(){
+		Grid.hide();
+	};
+
 	me.notFound = function(){
 		collectionContainer.innerHTML = Template.get("notfound")
 	};
@@ -291,13 +299,13 @@ var UI = function(){
 			if (propertiesContainer) propertiesContainer.classList.remove("haseditor");
 			
 			// clear generated collection cache;
-			clearCollectionCache(collection);
+			DataProvider.clearCollectionCache(collection);
 			renderCollection();
 			App.refresh();
 		}else{
 			var data = collection.info || "";
 			
-			var properties = me.parseProperties(data,true);
+			var properties = DataProvider.parseProperties(data,true);
 			editor = document.createElement("textarea");
 			editor.value = properties.info;
 			if (h) editor.style.height = Math.max(h,300) + "px";
@@ -340,37 +348,7 @@ var UI = function(){
 
 	};
 	
-	me.parseProperties = function(info,parseAll){
-		var properties = {list: []};
-		
-		var lines = info.split('\n');
-		
-		if (Config.properties && Config.properties.length){
-			Config.properties.forEach(function(property){
-				_property = property.name.toLowerCase() + ":";
-				var found = false;
-				lines.forEach(function (line,index) {
-					_line = line.toLowerCase();
-					if (_line.indexOf(_property) === 0){
-						found = true;
-						line = line.substr(property.name.length + 1);
-						line = line.trim();
-						properties.list.push({name: property.name, value: line, type: property.type, private: !!property.private});
-						lines.splice(index, 1);
-					}
-				});
-				if (!found && parseAll){
-					properties.list.push({name: property.name, value: "", type: property.type})
-				}
-			});
-		}
-		
-		properties.info = lines.join('\n');
-		
-		return properties;
-		
-	};
-	
+
 	me.addProperty = function(){
 		var container = document.getElementById("config_properties");
 		var template = document.getElementById("config_properties_new");
@@ -578,7 +556,7 @@ var UI = function(){
 			config={intro: config}
 		}
 		config.onCancel = config.onCancel || function(){UI.hideDialog()};
-		if (config.showInput || config.yesno) config.showCancel = true;
+		if (config.showInput || config.showTextarea || config.yesno) config.showCancel = true;
 
 		var input;
 
@@ -589,6 +567,14 @@ var UI = function(){
 			input.type = "text";
 			if (config.inputValue) input.value = config.inputValue;
 			dialog.appendChild(input);
+		}
+		if (config.showTextarea){
+			input = document.createElement("textarea");
+			if (config.textareaValue) input.value = config.textareaValue;
+			dialog.appendChild(input);
+			dialog.classList.add("wide");
+		}else{
+			dialog.classList.remove("wide");
 		}
 
 		var buttons = document.createElement("div");
@@ -710,13 +696,6 @@ var UI = function(){
 		mainImage.href = this.href;
 		mainImage.style.backgroundImage = "url('"+this.href+"')";
 	};
-	
-	var clearCollectionCache = function(collection){
-		collection.visibleFiles = undefined;
-		collection.footerinfo = undefined;
-		collection.properties = undefined;
-		collection.infoHTML = undefined;
-	};
 
 	var renderCollection = function(){
 		UI.hideSearch();
@@ -729,15 +708,7 @@ var UI = function(){
 			if (!exists) collection.images.unshift({name: collection.mainImage, path: collection.path + "/" + collection.mainImage})
 		}
 
-		if (!collection.visibleFiles && collection.files){
-			collection.visibleFiles = [];
-			collection.files.forEach(function(file){
-				if (file.name !== "info.txt"){
-					collection.visibleFiles.push(file);
-				}
-				file.private = !!file.private;
-			})
-		}
+		DataProvider.generateExtendedInfo(collection);
 
 		if (!collection.footerinfo && collection.contentModified){
 			var created = "";
@@ -758,12 +729,13 @@ var UI = function(){
 		var properties = {info: collection.info};
 		if (!collection.properties){
 			collection.properties = [];
-			properties = me.parseProperties(collection.info || "");
+			properties = DataProvider.parseProperties(collection.info || "");
 			properties.list.forEach(function(property){
 				var passed = true;
 				if (property.private && !Config.isLoggedIn) passed = false;
 				if (passed) collection.properties.push({name: property.name, value: property.value});
 			});
+			collection.displayInfo = properties.info;
 		}
 		
 		if (properties.info && !collection.infoHTML){
@@ -780,8 +752,6 @@ var UI = function(){
 				f.private = !!f.private;
 			});
 		}
-
-		
 
 
 		// Add all items from children if needed

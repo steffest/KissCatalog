@@ -51,6 +51,9 @@ var App = function(){
 			case "/lastadded":
 				UI.showLastAdded();
 				break;
+			case "/grid":
+				UI.showGrid();
+				break;
 			default:
 				var collection = DataProvider.getCollectionByPath(path);
 				if (collection){

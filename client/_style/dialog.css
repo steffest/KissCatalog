@@ -27,6 +27,10 @@
     display: none;
 }
 
+#blanket #dialog.wide{
+    width: 500px;
+}
+
 #blanket #dialog .buttons{
     text-align: center;
     background-color: #4b6071;
@@ -59,7 +63,8 @@
     padding: 0 20px;
 }
 
-#blanket #dialog input{
+#blanket #dialog input,
+#blanket #dialog textarea{
     text-align: center;
     padding: 10px;
     width: 90%;
@@ -67,6 +72,11 @@
     margin: auto;
     background-color: #c4ccd1;
     border: 1px solid #415667;
+}
+
+#blanket #dialog textarea{
+    height: 300px;
+    text-align: left;
 }
 
 #blanket #popupmenu{

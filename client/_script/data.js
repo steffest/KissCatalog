@@ -168,9 +168,9 @@ var DataProvider = function(){
 		return currentCollection;
 	};
 	
-	me.setCurrentCollection = function(collection){
+	me.setCurrentCollection = function(collection,silent){
 		currentCollection = collection;
-		EventBus.trigger(EVENT.COLLECTION_CHANGE);
+		if (!silent) EventBus.trigger(EVENT.COLLECTION_CHANGE);
 	};
 
 	me.getLastModified = function(){
@@ -181,7 +181,67 @@ var DataProvider = function(){
         flatFolders.sort(function(a,b){return a.created>b.created?-1:(a.created<b.created?1:0)});
         return flatFolders;
     };
-    
+
+	me.parseProperties = function(info,parseAll){
+		var properties = {list: []};
+
+		var lines = info.split('\n');
+
+		if (Config.properties && Config.properties.length){
+			Config.properties.forEach(function(property){
+				_property = property.name.toLowerCase() + ":";
+				var found = false;
+				lines.forEach(function (line,index) {
+					_line = line.toLowerCase();
+					if (_line.indexOf(_property) === 0){
+						found = true;
+						line = line.substr(property.name.length + 1);
+						line = line.trim();
+						properties.list.push({name: property.name, value: line, type: property.type, private: !!property.private});
+						lines.splice(index, 1);
+					}
+				});
+				if (!found && parseAll){
+					properties.list.push({name: property.name, value: "", type: property.type})
+				}
+			});
+		}
+
+		properties.info = lines.join('\n');
+
+		return properties;
+
+	};
+
+    me.rebuildInfo = function(collection){
+		collection.info = collection.displayInfo || collection.info;
+		Config.properties.forEach(function(property){
+			var this_property = collection.properties.find(function(item){return item.name === property.name});
+			if (this_property && this_property.value){
+				collection.info = this_property.name + ": " + this_property.value + '\n' + collection.info;
+			}
+		});
+	};
+
+    me.generateExtendedInfo = function(collection){
+		if (!collection.visibleFiles && collection.files){
+			collection.visibleFiles = [];
+			collection.files.forEach(function(file){
+				if (file.name !== "info.txt"){
+					collection.visibleFiles.push(file);
+				}
+				file.private = !!file.private;
+			})
+		}
+	};
+
+	me.clearCollectionCache = function(collection){
+		collection.visibleFiles = undefined;
+		collection.footerinfo = undefined;
+		collection.properties = undefined;
+		collection.infoHTML = undefined;
+		collection.displayInfo = undefined;
+	};
     
     function getDisplayName(item){
     	return item.private?item.name.replace("_private",""):item.name;
