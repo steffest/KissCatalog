@@ -387,7 +387,7 @@ var UI = function(){
 			items:[
 				{label: "Rename", onclick: function(){UI.renameFile(event,filename,path)}},
 				{label: filename.indexOf("_private")>0 ? "Make public" : "Make private", onclick: function(){UI.toggleFlag(event,"private",filename,path)}},
-				{label: "Move", onclick: function(){UI.moveFile(event,filename,path)}},
+				{label: "Move", onclick: function(){UI.moveFile(event,filename,path,type)}},
 				{label: "Delete", onclick: function(){UI.deleteFile(event,filename,path)}}
 			]
 		};
@@ -403,7 +403,7 @@ var UI = function(){
 		console.log(event.target);
 	};
 
-	me.moveFile = function(event,filename,path){
+	me.moveFile = function(event,filename,path,type){
 		if (event && event.preventDefault){
 			event.preventDefault();
 			event.stopPropagation();
@@ -417,9 +417,17 @@ var UI = function(){
 			path = path.join("/");
 		}
 
+		var oldPath = path + "/" + filename;
+		var checkPath = path;
+		if (type === "folder") {
+			checkPath = oldPath;
+			if (checkPath.slice(-1) !== "/") checkPath += "/";
+		}
+
 		me.showDialog({
 			caption: "Move File",
-			intro: "Select the parent to move this item to",
+			intro: "Select the parent to move '" + filename + "' to",
+			OKLabel: "Never mind",
 			wide: true,
 			contentFunction:function(){
 				var collection = DataProvider.getCollection();
@@ -432,22 +440,27 @@ var UI = function(){
 					node.path = item.path;
 					node.className = "node";
 					node.style.paddingLeft = (indent * 20) + "px";
-					node.onclick = select;
 					tree.appendChild(node);
-					if (item.folders && item.folders.length){
-						item.folders.forEach(function(folder){
-							add(folder,indent+1);
-						});
+
+					if ((item.path === oldPath) || (item.path.indexOf(checkPath)>=0)){
+						node.className += " inactive";
+					}else{
+						node.onclick = select;
+
+						if (item.folders && item.folders.length){
+							item.folders.forEach(function(folder){
+								add(folder,indent+1);
+							});
+						}
 					}
 				}
 
 				function select(){
-					var oldPath = path + "/" + filename;
-					var newPath = this.path + "/" + filename;
 					if (oldPath === this.path){
 						me.showDialog("You can't move an item into itself ...");
 					}else{
-						DataProvider.moveFile(path + "/" + filename,this.path + "/" + filename,function(result){
+						var newPath = this.path + "/" + filename;
+						DataProvider.moveFile(oldPath,newPath,function(result){
 							if (result.success){
 								me.hideDialog();
 								App.refresh();
@@ -659,7 +672,7 @@ var UI = function(){
 			if (config.onOk) config.onOk(input ? input.value : true);
 			UI.hideDialog();
 		};
-		ok.innerHTML = config.yesno ? "Yes" : "OK";
+		ok.innerHTML = config.OKLabel || (config.yesno ? "Yes" : "OK");
 		buttons.appendChild(ok);
 		if (config.showCancel){
 			var cancel = document.createElement("div");

@@ -64,7 +64,7 @@
 <div id="items">
     {{#folders}}
     <a href="#{{path}}" class="{{#private}}private{{/private}}">
-        <div class="iconbutton menu" onclick="UI.itemPopupMenu(event,'folder','{{{_name}}}')" title="Actions"></div>
+        <div class="iconbutton menu" onclick="UI.itemPopupMenu(event,'folder','{{{name}}}')" title="Actions"></div>
         {{#mainImage}}<figure style="background-image: url('{{>collectionUrl}}{{path}}/{{mainImage}}')"></figure>{{/mainImage}}{{#itemCount}}<i>{{itemCount}}</i>{{/itemCount}}
         <span>{{displayName}}</span>
     </a>
@@ -75,8 +75,7 @@
     <h4>Children</h4>
     {{#children}}
     <a href="#{{path}}">
-        <div class="iconbutton delete" onclick="UI.deleteFile(event,'{{name}}','{{path}}')" title="Delete">x</div>
-        <div class="iconbutton rename" onclick="UI.renameFile(event,'{{name}}','{{path}}')" title="Rename"></div>
+        <div class="iconbutton menu" onclick="UI.itemPopupMenu(event,'folder','{{{name}}}','{{path}}')" title="Actions"></div>
         {{#mainImage}}<figure style="background-image: url('{{>collectionUrl}}{{path}}/{{mainImage}}')"></figure>{{/mainImage}}
         <span>{{displayName}}</span></a>
     {{/children}}

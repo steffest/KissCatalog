@@ -35,7 +35,7 @@ var Util = function(){
 			s = s.split("*").join("");
 			s = s.split("'").join("’");
 			
-			s = s.split(" ").join("-");
+			//s = s.split(" ").join("-");
 		}
 		return s;
 	};

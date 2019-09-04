@@ -139,6 +139,17 @@
     background-color: rgba(255, 255, 255, 0.1);
 }
 
+#dialog .tree .node.inactive{
+    opacity: 0.3;
+}
+
+#dialog .tree .node.inactive:hover{
+    background-color: transparent;
+    cursor: not-allowed;
+}
+
+
+
 ::-webkit-scrollbar {
     width: 12px;
     background-color: transparent;
