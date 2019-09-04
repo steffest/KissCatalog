@@ -46,7 +46,7 @@
         <h4>Files</h4>
         {{#visibleFiles}}
         <a href="{{>collectionUrl}}{{path}}" target="_blank" class="{{#private}}private{{/private}}">{{displayName}}
-            <div class="iconbutton menu" onclick="UI.itemPopupMenu(event,'file','{{name}}')" title="Actions"></div>
+            <div class="iconbutton menu" onclick="UI.itemPopupMenu(event,'file','{{{name}}}')" title="Actions"></div>
         </a>
         {{/visibleFiles}}
         <div class="buttons">
@@ -64,7 +64,7 @@
 <div id="items">
     {{#folders}}
     <a href="#{{path}}" class="{{#private}}private{{/private}}">
-        <div class="iconbutton menu" onclick="UI.itemPopupMenu(event,'folder','{{name}}')" title="Actions"></div>
+        <div class="iconbutton menu" onclick="UI.itemPopupMenu(event,'folder','{{{_name}}}')" title="Actions"></div>
         {{#mainImage}}<figure style="background-image: url('{{>collectionUrl}}{{path}}/{{mainImage}}')"></figure>{{/mainImage}}{{#itemCount}}<i>{{itemCount}}</i>{{/itemCount}}
         <span>{{displayName}}</span>
     </a>

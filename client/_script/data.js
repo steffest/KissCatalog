@@ -31,7 +31,7 @@ var DataProvider = function(){
 			content: currentCollection.info
 		};
 		FetchService.post(url,JSON.stringify(data),function(result){
-			console.error(result);
+			//console.log(result);
 		})
 	};
 	

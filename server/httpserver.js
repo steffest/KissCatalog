@@ -301,7 +301,7 @@ var HTTPserver = function(){
 				if (action === "createfolder"){
 					handled = true;
 					parseBody(body => {
-						var folderPath =  util.cleanPath(config.fullcollectionPath + body.path + "/" + body.filename);
+						var folderPath =  util.cleanPath(config.fullcollectionPath + body.path + "/" + util.cleanFilename(body.filename));
 						fs.mkdir(folderPath,function(err){
 							if (err){
 								logger.error("Failed to create folder folderPath" + folderPath);
