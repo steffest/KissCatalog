@@ -99,12 +99,17 @@ Of course you can rename the "client" folder to whatever you want.
  - view-settings per folder (like some folders in grid mode, others in list mode)
  - "spotlight" some items that will be displayed on the home screen
  - ~~private fields (e.g. to put the estimated value of items)~~ -> Done!
- - private images and files
+ - ~~private images and files~~ -> Done!
  - ~~private folders~~ -> Done!
  - link detecton in .txt files
+ - when running locally, "open item in explorer" option
 
 
 ### History:
+- V 0.05 - September 2019
+  - Move Files/Folders + bugfixes
+- V 0.05 - August 2019
+  - Private files added + bugfixes
 - V 0.04 - July 2019
   - Property items added
 - V 0.03 - June 2019
