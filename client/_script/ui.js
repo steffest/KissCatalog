@@ -442,16 +442,18 @@ var UI = function(){
 					node.style.paddingLeft = (indent * 20) + "px";
 					tree.appendChild(node);
 
-					if ((item.path === oldPath) || (item.path.indexOf(checkPath)>=0)){
+					var includeChildren = true;
+					if ((type === "folder") && ((item.path === oldPath) || (item.path.indexOf(checkPath)>=0))){
 						node.className += " inactive";
+						includeChildren=false;
 					}else{
 						node.onclick = select;
+					}
 
-						if (item.folders && item.folders.length){
-							item.folders.forEach(function(folder){
-								add(folder,indent+1);
-							});
-						}
+					if (includeChildren && item.folders && item.folders.length){
+						item.folders.forEach(function(folder){
+							add(folder,indent+1);
+						});
 					}
 				}
 
