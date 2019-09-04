@@ -84,6 +84,18 @@ var DataProvider = function(){
 		});
 	};
 
+	me.moveFile = function(path,newpath,next){
+		var data = {
+			path: path || currentCollection.path,
+			newpath: newpath
+		};
+
+		FetchService.post("/move",JSON.stringify(data),function(result){
+			console.log(result);
+			next({success:result === "ok"});
+		});
+	};
+
 	me.addSubFolder = function(name,next){
 		var data = {
 			path: currentCollection.path,

@@ -387,6 +387,7 @@ var UI = function(){
 			items:[
 				{label: "Rename", onclick: function(){UI.renameFile(event,filename,path)}},
 				{label: filename.indexOf("_private")>0 ? "Make public" : "Make private", onclick: function(){UI.toggleFlag(event,"private",filename,path)}},
+				{label: "Move", onclick: function(){UI.moveFile(event,filename,path)}},
 				{label: "Delete", onclick: function(){UI.deleteFile(event,filename,path)}}
 			]
 		};
@@ -401,6 +402,70 @@ var UI = function(){
 		console.log(event);
 		console.log(event.target);
 	};
+
+	me.moveFile = function(event,filename,path){
+		if (event && event.preventDefault){
+			event.preventDefault();
+			event.stopPropagation();
+		}
+
+		path = path || DataProvider.getCurrentCollection().path;
+
+		if (path && path.indexOf(filename)>=0){
+			path = path.split("/");
+			path.pop();
+			path = path.join("/");
+		}
+
+		me.showDialog({
+			caption: "Move File",
+			intro: "Select the parent to move this item to",
+			wide: true,
+			contentFunction:function(){
+				var collection = DataProvider.getCollection();
+				var tree = document.createElement("div");
+				tree.className = "tree";
+
+				function add(item,indent){
+					var node = document.createElement("div");
+					node.innerHTML = item.name;
+					node.path = item.path;
+					node.className = "node";
+					node.style.paddingLeft = (indent * 20) + "px";
+					node.onclick = select;
+					tree.appendChild(node);
+					if (item.folders && item.folders.length){
+						item.folders.forEach(function(folder){
+							add(folder,indent+1);
+						});
+					}
+				}
+
+				function select(){
+					var oldPath = path + "/" + filename;
+					var newPath = this.path + "/" + filename;
+					if (oldPath === this.path){
+						me.showDialog("You can't move an item into itself ...");
+					}else{
+						DataProvider.moveFile(path + "/" + filename,this.path + "/" + filename,function(result){
+							if (result.success){
+								me.hideDialog();
+								App.refresh();
+							}else{
+								me.showDialog("Something went wrong");
+							}
+						});
+					}
+				}
+
+				add(collection,0);
+
+				return tree;
+			}
+		})
+	};
+	
+	
 
 	me.deleteFile = function(event,filename,path){
 		if (event && event.preventDefault){
@@ -572,9 +637,19 @@ var UI = function(){
 			input = document.createElement("textarea");
 			if (config.textareaValue) input.value = config.textareaValue;
 			dialog.appendChild(input);
+			config.wide = true;
 			dialog.classList.add("wide");
-		}else{
-			dialog.classList.remove("wide");
+		}
+
+		dialog.classList.toggle("wide",config.wide);
+
+		if (config.contentFunction){
+			var content = config.contentFunction();
+			if (typeof content === "string"){
+				dialog.innerHTML += content;
+			}else if (typeof content === "object" && content.tagName){
+				dialog.appendChild(content);
+			}
 		}
 
 		var buttons = document.createElement("div");

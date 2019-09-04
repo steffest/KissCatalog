@@ -272,7 +272,24 @@ var HTTPserver = function(){
 						logger.info("rename " + filePath + " to " + targetPath);
 						fs.rename(filePath, targetPath, function(err){
 							if (err){
-								logger.error("Failed to rename file or folder folderPath" + targetPath);
+								logger.error("Failed to rename file or folder " + filePath + " to " + targetPath);
+								res.end('error');
+							}else{
+								res.end('ok');
+							}
+						});
+					});
+				}
+
+				if (action === "move"){
+					handled = true;
+					parseBody(body => {
+						var filePath =  util.cleanPath(config.fullcollectionPath + body.path);
+						var targetPath =  util.cleanPath(config.fullcollectionPath + body.newpath);
+						logger.info("move " + filePath + " to " + targetPath);
+						fs.rename(filePath, targetPath, function(err){
+							if (err){
+								logger.error("Failed to move file or folder " + filePath + " to " + targetPath);
 								res.end('error');
 							}else{
 								res.end('ok');
